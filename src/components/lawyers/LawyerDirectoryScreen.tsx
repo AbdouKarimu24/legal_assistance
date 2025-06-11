@@ -76,32 +76,89 @@ const LawyerDirectoryScreen: React.FC<LawyerDirectoryScreenProps> = ({ onBecomeL
           rating: 4.6,
           reviewCount: 32,
           isVerified: true
+        },
+        {
+          id: '3',
+          name: 'Maitre Paul Biya',
+          email: 'paul.biya@legal.cm',
+          licenseNumber: 'BAR009012',
+          specialization: 'Family Law',
+          experienceYears: 8,
+          practiceAreas: ['Family Law', 'Divorce', 'Child Custody'],
+          languages: ['French', 'English', 'Bamoun'],
+          officeAddress: 'Quartier Mvog-Ada, Yaoundé, Cameroon',
+          phone: '+237 655 123 456',
+          description: 'Compassionate family law attorney helping families through difficult times with sensitivity and expertise.',
+          rating: 4.7,
+          reviewCount: 28,
+          isVerified: true
+        },
+        {
+          id: '4',
+          name: 'Maitre Fatima Hassan',
+          email: 'fatima.hassan@immigration.cm',
+          licenseNumber: 'BAR003456',
+          specialization: 'Immigration Law',
+          experienceYears: 10,
+          practiceAreas: ['Immigration Law', 'Refugee Law', 'Citizenship'],
+          languages: ['French', 'Arabic', 'Fulfulde', 'English'],
+          officeAddress: 'Rue de Bordeaux, Douala, Cameroon',
+          phone: '+237 678 901 234',
+          description: 'Dedicated immigration lawyer helping individuals and families navigate complex immigration processes.',
+          rating: 4.9,
+          reviewCount: 35,
+          isVerified: true
+        },
+        {
+          id: '5',
+          name: 'Maitre Emmanuel Nkomo',
+          email: 'emmanuel.nkomo@business.cm',
+          licenseNumber: 'BAR007890',
+          specialization: 'Business Law',
+          experienceYears: 20,
+          practiceAreas: ['Business Law', 'Contract Law', 'Intellectual Property'],
+          languages: ['English', 'French', 'Bassa'],
+          officeAddress: 'Avenue Charles de Gaulle, Douala, Cameroon',
+          phone: '+237 699 876 543',
+          description: 'Experienced business attorney specializing in corporate formation, contracts, and intellectual property protection.',
+          rating: 4.5,
+          reviewCount: 52,
+          isVerified: true
         }
       ];
 
-      // Filter lawyers based on search and filters
+      // Apply all filters and search
       let filteredLawyers = mockLawyers;
       
-      if (searchTerm) {
+      // Search functionality - search across multiple fields
+      if (searchTerm.trim()) {
+        const searchTermLower = searchTerm.toLowerCase().trim();
         filteredLawyers = filteredLawyers.filter(lawyer =>
-          lawyer.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          lawyer.specialization.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          lawyer.description.toLowerCase().includes(searchTerm.toLowerCase())
+          lawyer.name.toLowerCase().includes(searchTermLower) ||
+          lawyer.specialization.toLowerCase().includes(searchTermLower) ||
+          lawyer.description.toLowerCase().includes(searchTermLower) ||
+          lawyer.practiceAreas.some(area => area.toLowerCase().includes(searchTermLower)) ||
+          lawyer.languages.some(lang => lang.toLowerCase().includes(searchTermLower)) ||
+          lawyer.officeAddress.toLowerCase().includes(searchTermLower)
         );
       }
 
+      // Specialization filter
       if (filters.specialization) {
         filteredLawyers = filteredLawyers.filter(lawyer =>
-          lawyer.specialization === filters.specialization
+          lawyer.specialization === filters.specialization ||
+          lawyer.practiceAreas.includes(filters.specialization)
         );
       }
 
+      // Experience filter
       if (filters.minExperience > 0) {
         filteredLawyers = filteredLawyers.filter(lawyer =>
           lawyer.experienceYears >= filters.minExperience
         );
       }
 
+      // Language filter
       if (filters.language) {
         filteredLawyers = filteredLawyers.filter(lawyer =>
           lawyer.languages.includes(filters.language)
@@ -163,71 +220,222 @@ const LawyerDirectoryScreen: React.FC<LawyerDirectoryScreenProps> = ({ onBecomeL
           </button>
         </div>
 
-        {/* Search and Filters */}
+        {/* Enhanced Search and Filters */}
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6 mb-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            {/* Search Input */}
-            <div>
+          <div className="flex flex-col space-y-4">
+            {/* Search Bar */}
+            <div className="relative">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <svg className="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+              </div>
               <input
                 type="text"
-                placeholder="Search lawyers..."
+                placeholder="Search lawyers by name, specialization, location, or practice area..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="input-field"
+                className="input-field pl-10"
               />
+              {searchTerm && (
+                <button
+                  onClick={() => setSearchTerm('')}
+                  className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600"
+                >
+                  <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              )}
             </div>
 
-            {/* Specialization Filter */}
-            <div>
-              <select
-                value={filters.specialization}
-                onChange={(e) => setFilters(prev => ({ ...prev, specialization: e.target.value }))}
-                className="input-field"
-              >
-                <option value="">All Specializations</option>
-                <option value="Corporate Law">Corporate Law</option>
-                <option value="Criminal Law">Criminal Law</option>
-                <option value="Family Law">Family Law</option>
-                <option value="Immigration Law">Immigration Law</option>
-                <option value="Civil Rights">Civil Rights</option>
-                <option value="Personal Injury">Personal Injury</option>
-                <option value="Real Estate">Real Estate</option>
-                <option value="Employment Law">Employment Law</option>
-              </select>
+            {/* Filter Controls */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+              {/* Specialization Filter */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  Specialization
+                </label>
+                <select
+                  value={filters.specialization}
+                  onChange={(e) => setFilters(prev => ({ ...prev, specialization: e.target.value }))}
+                  className="input-field"
+                >
+                  <option value="">All Specializations</option>
+                  <option value="Corporate Law">Corporate Law</option>
+                  <option value="Criminal Law">Criminal Law</option>
+                  <option value="Family Law">Family Law</option>
+                  <option value="Immigration Law">Immigration Law</option>
+                  <option value="Business Law">Business Law</option>
+                  <option value="Civil Rights">Civil Rights</option>
+                  <option value="Personal Injury">Personal Injury</option>
+                  <option value="Real Estate">Real Estate</option>
+                  <option value="Employment Law">Employment Law</option>
+                  <option value="Tax Law">Tax Law</option>
+                  <option value="Intellectual Property">Intellectual Property</option>
+                </select>
+              </div>
+
+              {/* Experience Filter */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  Experience
+                </label>
+                <select
+                  value={filters.minExperience}
+                  onChange={(e) => setFilters(prev => ({ ...prev, minExperience: parseInt(e.target.value) }))}
+                  className="input-field"
+                >
+                  <option value="0">Any Experience</option>
+                  <option value="3">3+ Years</option>
+                  <option value="5">5+ Years</option>
+                  <option value="10">10+ Years</option>
+                  <option value="15">15+ Years</option>
+                  <option value="20">20+ Years</option>
+                </select>
+              </div>
+
+              {/* Language Filter */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  Language
+                </label>
+                <select
+                  value={filters.language}
+                  onChange={(e) => setFilters(prev => ({ ...prev, language: e.target.value }))}
+                  className="input-field"
+                >
+                  <option value="">Any Language</option>
+                  <option value="English">English</option>
+                  <option value="French">French</option>
+                  <option value="Duala">Duala</option>
+                  <option value="Ewondo">Ewondo</option>
+                  <option value="Fulfulde">Fulfulde</option>
+                  <option value="Bassa">Bassa</option>
+                  <option value="Bamoun">Bamoun</option>
+                  <option value="Arabic">Arabic</option>
+                </select>
+              </div>
+
+              {/* Clear Filters Button */}
+              <div className="flex items-end">
+                <button
+                  onClick={() => {
+                    setSearchTerm('');
+                    setFilters({
+                      specialization: '',
+                      minExperience: 0,
+                      language: ''
+                    });
+                  }}
+                  className="w-full px-4 py-2 text-sm text-gray-600 dark:text-gray-400 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-lg transition-colors"
+                  disabled={!searchTerm && !filters.specialization && !filters.language && filters.minExperience === 0}
+                >
+                  Clear All
+                </button>
+              </div>
             </div>
 
-            {/* Experience Filter */}
-            <div>
-              <select
-                value={filters.minExperience}
-                onChange={(e) => setFilters(prev => ({ ...prev, minExperience: parseInt(e.target.value) }))}
-                className="input-field"
-              >
-                <option value="0">Any Experience</option>
-                <option value="5">5+ Years</option>
-                <option value="10">10+ Years</option>
-                <option value="15">15+ Years</option>
-                <option value="20">20+ Years</option>
-              </select>
-            </div>
-
-            {/* Language Filter */}
-            <div>
-              <select
-                value={filters.language}
-                onChange={(e) => setFilters(prev => ({ ...prev, language: e.target.value }))}
-                className="input-field"
-              >
-                <option value="">Any Language</option>
-                <option value="English">English</option>
-                <option value="French">French</option>
-                <option value="Duala">Duala</option>
-                <option value="Ewondo">Ewondo</option>
-                <option value="Fulfulde">Fulfulde</option>
-              </select>
-            </div>
+            {/* Active Filters Display */}
+            {(searchTerm || filters.specialization || filters.language || filters.minExperience > 0) && (
+              <div className="flex flex-wrap gap-2 pt-2 border-t border-gray-200 dark:border-gray-700">
+                <span className="text-sm text-gray-600 dark:text-gray-400">Active filters:</span>
+                {searchTerm && (
+                  <span className="inline-flex items-center px-2 py-1 bg-primary/10 text-primary text-sm rounded-full">
+                    Search: "{searchTerm}"
+                    <button
+                      onClick={() => setSearchTerm('')}
+                      className="ml-1 text-primary hover:text-primary-dark"
+                    >
+                      ×
+                    </button>
+                  </span>
+                )}
+                {filters.specialization && (
+                  <span className="inline-flex items-center px-2 py-1 bg-blue-100 text-blue-800 text-sm rounded-full">
+                    {filters.specialization}
+                    <button
+                      onClick={() => setFilters(prev => ({ ...prev, specialization: '' }))}
+                      className="ml-1 text-blue-800 hover:text-blue-900"
+                    >
+                      ×
+                    </button>
+                  </span>
+                )}
+                {filters.language && (
+                  <span className="inline-flex items-center px-2 py-1 bg-green-100 text-green-800 text-sm rounded-full">
+                    {filters.language}
+                    <button
+                      onClick={() => setFilters(prev => ({ ...prev, language: '' }))}
+                      className="ml-1 text-green-800 hover:text-green-900"
+                    >
+                      ×
+                    </button>
+                  </span>
+                )}
+                {filters.minExperience > 0 && (
+                  <span className="inline-flex items-center px-2 py-1 bg-purple-100 text-purple-800 text-sm rounded-full">
+                    {filters.minExperience}+ years
+                    <button
+                      onClick={() => setFilters(prev => ({ ...prev, minExperience: 0 }))}
+                      className="ml-1 text-purple-800 hover:text-purple-900"
+                    >
+                      ×
+                    </button>
+                  </span>
+                )}
+              </div>
+            )}
           </div>
         </div>
+
+        {/* Results Summary and Sorting */}
+        {!loading && (
+          <div className="flex justify-between items-center mb-6">
+            <div className="text-sm text-gray-600 dark:text-gray-400">
+              {lawyers.length === 0 ? (
+                "No lawyers found"
+              ) : (
+                `Showing ${lawyers.length} lawyer${lawyers.length !== 1 ? 's' : ''}`
+              )}
+              {(searchTerm || filters.specialization || filters.language || filters.minExperience > 0) && (
+                <span> matching your criteria</span>
+              )}
+            </div>
+            
+            {lawyers.length > 0 && (
+              <div className="flex items-center space-x-2">
+                <span className="text-sm text-gray-600 dark:text-gray-400">Sort by:</span>
+                <select
+                  onChange={(e) => {
+                    const sortBy = e.target.value;
+                    const sortedLawyers = [...lawyers].sort((a, b) => {
+                      switch (sortBy) {
+                        case 'rating':
+                          return b.rating - a.rating;
+                        case 'experience':
+                          return b.experienceYears - a.experienceYears;
+                        case 'name':
+                          return a.name.localeCompare(b.name);
+                        case 'reviews':
+                          return b.reviewCount - a.reviewCount;
+                        default:
+                          return 0;
+                      }
+                    });
+                    setLawyers(sortedLawyers);
+                  }}
+                  className="text-sm border border-gray-300 dark:border-gray-600 rounded px-2 py-1 bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
+                >
+                  <option value="rating">Highest Rated</option>
+                  <option value="experience">Most Experienced</option>
+                  <option value="reviews">Most Reviews</option>
+                  <option value="name">Name (A-Z)</option>
+                </select>
+              </div>
+            )}
+          </div>
+        )}
 
         {/* Lawyers Grid */}
         {loading ? (
@@ -237,7 +445,33 @@ const LawyerDirectoryScreen: React.FC<LawyerDirectoryScreenProps> = ({ onBecomeL
           </div>
         ) : lawyers.length === 0 ? (
           <div className="text-center py-12">
-            <p className="text-gray-600 dark:text-gray-400">No lawyers found matching your criteria.</p>
+            <div className="text-gray-400 mb-4">
+              <svg className="mx-auto h-12 w-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
+            </div>
+            <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">No lawyers found</h3>
+            <p className="text-gray-600 dark:text-gray-400 mb-4">
+              {(searchTerm || filters.specialization || filters.language || filters.minExperience > 0) 
+                ? "Try adjusting your search criteria or filters."
+                : "No lawyers are currently available in our directory."
+              }
+            </p>
+            {(searchTerm || filters.specialization || filters.language || filters.minExperience > 0) && (
+              <button
+                onClick={() => {
+                  setSearchTerm('');
+                  setFilters({
+                    specialization: '',
+                    minExperience: 0,
+                    language: ''
+                  });
+                }}
+                className="text-primary hover:text-primary-dark font-medium"
+              >
+                Clear all filters
+              </button>
+            )}
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
