@@ -60,8 +60,12 @@ app.post('/login', async (req, res) => {
 });
 
 const PORT = process.env.PORT || 3001;
-app.listen(PORT, () => {
-  console.log(`Auth service running on port ${PORT}`);
-});
+
+// Only start server if this file is run directly (not when imported for testing)
+if (require.main === module) {
+  app.listen(PORT, () => {
+    console.log(`Auth service running on port ${PORT}`);
+  });
+}
 
 module.exports = app;
