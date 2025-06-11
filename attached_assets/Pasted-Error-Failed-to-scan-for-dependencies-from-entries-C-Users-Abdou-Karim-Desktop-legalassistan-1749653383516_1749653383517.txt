@@ -1,0 +1,192 @@
+Error:   Failed to scan for dependencies from entries:
+  C:/Users/Abdou Karim/Desktop/legalassistance/index.html
+
+  ✘ [ERROR] Expected ";" but found "code"
+
+    src/components/layout/MainApp.tsx:1:4:
+      1 │ The code has been modified to include the HistoryScreen component i...
+        │     ~~~~
+        ╵     ;
+
+
+✘ [ERROR] Unexpected "/"
+
+    src/services/database.ts:65:10:
+      65 │       `);</old_str>
+         ╵           ^
+
+
+    at failureErrorWithLog (C:\Users\Abdou Karim\Desktop\node_modules\esbuild\lib\main.js:1463:15)
+    at C:\Users\Abdou Karim\Desktop\node_modules\esbuild\lib\main.js:924:25
+    at runOnEndCallbacks (C:\Users\Abdou Karim\Desktop\node_modules\esbuild\lib\main.js:1303:45)
+    at buildResponseToResult (C:\Users\Abdou Karim\Desktop\node_modules\esbuild\lib\main.js:922:7)
+    at C:\Users\Abdou Karim\Desktop\node_modules\esbuild\lib\main.js:934:9
+    at new Promise (<anonymous>)
+    at requestCallbacks.on-end (C:\Users\Abdou Karim\Desktop\node_modules\esbuild\lib\main.js:933:54)
+    at handleRequest (C:\Users\Abdou Karim\Desktop\node_modules\esbuild\lib\main.js:626:17)
+    at handleIncomingPacket (C:\Users\Abdou Karim\Desktop\node_modules\esbuild\lib\main.js:651:7)
+    at Socket.readFromStdout (C:\Users\Abdou Karim\Desktop\node_modules\esbuild\lib\main.js:579:7)
+16:49:26 [vite] (client) Pre-transform error: Transform failed with 1 error:
+C:/Users/Abdou Karim/Desktop/legalassistance/src/services/database.ts:65:10: ERROR: Unexpected "/"
+  Plugin: vite:esbuild
+  File: C:/Users/Abdou Karim/Desktop/legalassistance/src/services/database.ts:65:10
+
+  Unexpected "/"
+  63 |            INDEX idx_user_searches (user_id, search_query(50))
+  64 |          )
+  65 |        `);</old_str>
+     |            ^
+  66 |
+  67 |        // Create verification_codes table
+
+16:49:26 [vite] (client) Pre-transform error: C:\Users\Abdou Karim\Desktop\legalassistance\src\components\layout\MainApp.tsx: Missing semicolon. (1:3)
+
+> 1 | The code has been modified to include the HistoryScreen component in the MainApp and render it based on the active tab.
+    |    ^
+  2 | ```
+  3 | ```replit_final_file>
+  4 | import React, { useState } from 'react';
+  Plugin: vite:react-babel
+  File: C:/Users/Abdou Karim/Desktop/legalassistance/src/components/layout/MainApp.tsx:1:3
+  1  |  The code has been modified to include the HistoryScreen component in the MainApp and render it based on the active tab.
+     |     ^
+  2  |  ```
+  3  |  ```replit_final_file>
+16:49:27 [vite] Internal server error: Transform failed with 1 error:
+C:/Users/Abdou Karim/Desktop/legalassistance/src/services/database.ts:65:10: ERROR: Unexpected "/"
+  Plugin: vite:esbuild
+  File: C:/Users/Abdou Karim/Desktop/legalassistance/src/services/database.ts:65:10
+
+  Unexpected "/"
+  63 |            INDEX idx_user_searches (user_id, search_query(50))
+  64 |          )
+  65 |        `);</old_str>
+     |            ^
+  66 |
+  67 |        // Create verification_codes table
+
+      at failureErrorWithLog (C:\Users\Abdou Karim\Desktop\node_modules\esbuild\lib\main.js:1463:15)
+      at C:\Users\Abdou Karim\Desktop\node_modules\esbuild\lib\main.js:734:50
+      at responseCallbacks.<computed> (C:\Users\Abdou Karim\Desktop\node_modules\esbuild\lib\main.js:601:9)
+      at handleIncomingPacket (C:\Users\Abdou Karim\Desktop\node_modules\esbuild\lib\main.js:656:12)
+      at Socket.readFromStdout (C:\Users\Abdou Karim\Desktop\node_modules\esbuild\lib\main.js:579:7)
+      at Socket.emit (node:events:518:28)
+      at addChunk (node:internal/streams/readable:561:12)
+      at readableAddChunkPushByteMode (node:internal/streams/readable:512:3)
+      at Readable.push (node:internal/streams/readable:392:5)
+      at Pipe.onStreamRead (node:internal/stream_base_commons:189:23)
+16:49:28 [vite] Internal server error: C:\Users\Abdou Karim\Desktop\legalassistance\src\components\layout\MainApp.tsx: Missing semicolon. (1:3)
+
+> 1 | The code has been modified to include the HistoryScreen component in the MainApp and render it based on the active tab.
+    |    ^
+  2 | ```
+  3 | ```replit_final_file>
+  4 | import React, { useState } from 'react';
+  Plugin: vite:react-babel
+  File: C:/Users/Abdou Karim/Desktop/legalassistance/src/components/layout/MainApp.tsx:1:3
+  1  |  The code has been modified to include the HistoryScreen component in the MainApp and render it based on the active tab.
+     |     ^
+  2  |  ```
+  3  |  ```replit_final_file>
+      at constructor (C:\Users\Abdou Karim\Desktop\node_modules\@babel\parser\lib\index.js:363:19)
+      at TypeScriptParserMixin.raise (C:\Users\Abdou Karim\Desktop\node_modules\@babel\parser\lib\index.js:6609:19)
+      at TypeScriptParserMixin.semicolon (C:\Users\Abdou Karim\Desktop\node_modules\@babel\parser\lib\index.js:6906:10)
+      at TypeScriptParserMixin.parseExpressionStatement (C:\Users\Abdou Karim\Desktop\node_modules\@babel\parser\lib\index.js:13204:10)
+      at TypeScriptParserMixin.parseExpressionStatement (C:\Users\Abdou Karim\Desktop\node_modules\@babel\parser\lib\index.js:9553:26)
+      at TypeScriptParserMixin.parseStatementContent (C:\Users\Abdou Karim\Desktop\node_modules\@babel\parser\lib\index.js:12818:19)
+      at TypeScriptParserMixin.parseStatementContent (C:\Users\Abdou Karim\Desktop\node_modules\@babel\parser\lib\index.js:9469:18)
+      at TypeScriptParserMixin.parseStatementLike (C:\Users\Abdou Karim\Desktop\node_modules\@babel\parser\lib\index.js:12685:17)
+      at TypeScriptParserMixin.parseModuleItem (C:\Users\Abdou Karim\Desktop\node_modules\@babel\parser\lib\index.js:12662:17)
+      at TypeScriptParserMixin.parseBlockOrModuleBlockBody (C:\Users\Abdou Karim\Desktop\node_modules\@babel\parser\lib\index.js:13235:36)
+      at TypeScriptParserMixin.parseBlockBody (C:\Users\Abdou Karim\Desktop\node_modules\@babel\parser\lib\index.js:13228:10)
+      at TypeScriptParserMixin.parseProgram (C:\Users\Abdou Karim\Desktop\node_modules\@babel\parser\lib\index.js:12541:10)
+      at TypeScriptParserMixin.parseTopLevel (C:\Users\Abdou Karim\Desktop\node_modules\@babel\parser\lib\index.js:12531:25)
+      at TypeScriptParserMixin.parse (C:\Users\Abdou Karim\Desktop\node_modules\@babel\parser\lib\index.js:14410:10)
+      at TypeScriptParserMixin.parse (C:\Users\Abdou Karim\Desktop\node_modules\@babel\parser\lib\index.js:10086:18)
+      at parse (C:\Users\Abdou Karim\Desktop\node_modules\@babel\parser\lib\index.js:14444:38)
+      at parser (C:\Users\Abdou Karim\Desktop\node_modules\@babel\core\lib\parser\index.js:41:34)
+      at parser.next (<anonymous>)
+      at normalizeFile (C:\Users\Abdou Karim\Desktop\node_modules\@babel\core\lib\transformation\normalize-file.js:64:37)
+      at normalizeFile.next (<anonymous>)
+      at run (C:\Users\Abdou Karim\Desktop\node_modules\@babel\core\lib\transformation\index.js:22:50)
+      at run.next (<anonymous>)
+      at transform (C:\Users\Abdou Karim\Desktop\node_modules\@babel\core\lib\transform.js:22:33)
+      at transform.next (<anonymous>)
+      at step (C:\Users\Abdou Karim\Desktop\node_modules\gensync\index.js:261:32)
+      at C:\Users\Abdou Karim\Desktop\node_modules\gensync\index.js:273:13
+      at async.call.result.err.err (C:\Users\Abdou Karim\Desktop\node_modules\gensync\index.js:223:11)
+      at C:\Users\Abdou Karim\Desktop\node_modules\gensync\index.js:189:28
+      at C:\Users\Abdou Karim\Desktop\node_modules\@babel\core\lib\gensync-utils\async.js:67:7
+      at C:\Users\Abdou Karim\Desktop\node_modules\gensync\index.js:113:33
+      at step (C:\Users\Abdou Karim\Desktop\node_modules\gensync\index.js:287:14)
+      at C:\Users\Abdou Karim\Desktop\node_modules\gensync\index.js:273:13
+      at async.call.result.err.err (C:\Users\Abdou Karim\Desktop\node_modules\gensync\index.js:223:11)
+16:49:28 [vite] Internal server error: Transform failed with 1 error:
+C:/Users/Abdou Karim/Desktop/legalassistance/src/services/database.ts:65:10: ERROR: Unexpected "/"
+  Plugin: vite:esbuild
+  File: C:/Users/Abdou Karim/Desktop/legalassistance/src/services/database.ts:65:10
+
+  Unexpected "/"
+  63 |            INDEX idx_user_searches (user_id, search_query(50))
+  64 |          )
+  65 |        `);</old_str>
+     |            ^
+  66 |
+  67 |        // Create verification_codes table
+
+      at failureErrorWithLog (C:\Users\Abdou Karim\Desktop\node_modules\esbuild\lib\main.js:1463:15)
+      at C:\Users\Abdou Karim\Desktop\node_modules\esbuild\lib\main.js:734:50
+      at responseCallbacks.<computed> (C:\Users\Abdou Karim\Desktop\node_modules\esbuild\lib\main.js:601:9)
+      at handleIncomingPacket (C:\Users\Abdou Karim\Desktop\node_modules\esbuild\lib\main.js:656:12)
+      at Socket.readFromStdout (C:\Users\Abdou Karim\Desktop\node_modules\esbuild\lib\main.js:579:7)
+      at Socket.emit (node:events:518:28)
+      at addChunk (node:internal/streams/readable:561:12)
+      at readableAddChunkPushByteMode (node:internal/streams/readable:512:3)
+      at Readable.push (node:internal/streams/readable:392:5)
+      at Pipe.onStreamRead (node:internal/stream_base_commons:189:23)
+16:49:28 [vite] Internal server error: C:\Users\Abdou Karim\Desktop\legalassistance\src\components\layout\MainApp.tsx: Missing semicolon. (1:3)
+
+> 1 | The code has been modified to include the HistoryScreen component in the MainApp and render it based on the active tab.
+    |    ^
+  2 | ```
+  3 | ```replit_final_file>
+  4 | import React, { useState } from 'react';
+  Plugin: vite:react-babel
+  File: C:/Users/Abdou Karim/Desktop/legalassistance/src/components/layout/MainApp.tsx:1:3
+  1  |  The code has been modified to include the HistoryScreen component in the MainApp and render it based on the active tab.
+     |     ^
+  2  |  ```
+  3  |  ```replit_final_file>
+      at constructor (C:\Users\Abdou Karim\Desktop\node_modules\@babel\parser\lib\index.js:363:19)
+      at TypeScriptParserMixin.raise (C:\Users\Abdou Karim\Desktop\node_modules\@babel\parser\lib\index.js:6609:19)
+      at TypeScriptParserMixin.semicolon (C:\Users\Abdou Karim\Desktop\node_modules\@babel\parser\lib\index.js:6906:10)
+      at TypeScriptParserMixin.parseExpressionStatement (C:\Users\Abdou Karim\Desktop\node_modules\@babel\parser\lib\index.js:13204:10)
+      at TypeScriptParserMixin.parseExpressionStatement (C:\Users\Abdou Karim\Desktop\node_modules\@babel\parser\lib\index.js:9553:26)
+      at TypeScriptParserMixin.parseStatementContent (C:\Users\Abdou Karim\Desktop\node_modules\@babel\parser\lib\index.js:12818:19)
+      at TypeScriptParserMixin.parseStatementContent (C:\Users\Abdou Karim\Desktop\node_modules\@babel\parser\lib\index.js:9469:18)
+      at TypeScriptParserMixin.parseStatementLike (C:\Users\Abdou Karim\Desktop\node_modules\@babel\parser\lib\index.js:12685:17)
+      at TypeScriptParserMixin.parseModuleItem (C:\Users\Abdou Karim\Desktop\node_modules\@babel\parser\lib\index.js:12662:17)
+      at TypeScriptParserMixin.parseBlockOrModuleBlockBody (C:\Users\Abdou Karim\Desktop\node_modules\@babel\parser\lib\index.js:13235:36)
+      at TypeScriptParserMixin.parseBlockBody (C:\Users\Abdou Karim\Desktop\node_modules\@babel\parser\lib\index.js:13228:10)
+      at TypeScriptParserMixin.parseProgram (C:\Users\Abdou Karim\Desktop\node_modules\@babel\parser\lib\index.js:12541:10)
+      at TypeScriptParserMixin.parseTopLevel (C:\Users\Abdou Karim\Desktop\node_modules\@babel\parser\lib\index.js:12531:25)
+      at TypeScriptParserMixin.parse (C:\Users\Abdou Karim\Desktop\node_modules\@babel\parser\lib\index.js:14410:10)
+      at TypeScriptParserMixin.parse (C:\Users\Abdou Karim\Desktop\node_modules\@babel\parser\lib\index.js:10086:18)
+      at parse (C:\Users\Abdou Karim\Desktop\node_modules\@babel\parser\lib\index.js:14444:38)
+      at parser (C:\Users\Abdou Karim\Desktop\node_modules\@babel\core\lib\parser\index.js:41:34)
+      at parser.next (<anonymous>)
+      at normalizeFile (C:\Users\Abdou Karim\Desktop\node_modules\@babel\core\lib\transformation\normalize-file.js:64:37)
+      at normalizeFile.next (<anonymous>)
+      at run (C:\Users\Abdou Karim\Desktop\node_modules\@babel\core\lib\transformation\index.js:22:50)
+      at run.next (<anonymous>)
+      at transform (C:\Users\Abdou Karim\Desktop\node_modules\@babel\core\lib\transform.js:22:33)
+      at transform.next (<anonymous>)
+      at step (C:\Users\Abdou Karim\Desktop\node_modules\gensync\index.js:261:32)
+      at C:\Users\Abdou Karim\Desktop\node_modules\gensync\index.js:273:13
+      at async.call.result.err.err (C:\Users\Abdou Karim\Desktop\node_modules\gensync\index.js:223:11)
+      at C:\Users\Abdou Karim\Desktop\node_modules\gensync\index.js:189:28
+      at C:\Users\Abdou Karim\Desktop\node_modules\@babel\core\lib\gensync-utils\async.js:67:7
+      at C:\Users\Abdou Karim\Desktop\node_modules\gensync\index.js:113:33
+      at step (C:\Users\Abdou Karim\Desktop\node_modules\gensync\index.js:287:14)
+      at C:\Users\Abdou Karim\Desktop\node_modules\gensync\index.js:273:13
+      at async.call.result.err.err (C:\Users\Abdou Karim\Desktop\node_modules\gensync\index.js:223:11)
