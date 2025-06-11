@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
 
@@ -22,6 +23,195 @@ interface Lawyer {
 interface LawyerDirectoryScreenProps {
   onBecomeLawyer: () => void;
 }
+
+// Lawyer Detail Component
+const LawyerDetailView: React.FC<{
+  lawyer: Lawyer;
+  onBack: () => void;
+  currentUser: any;
+}> = ({ lawyer, onBack, currentUser }) => {
+  const [rating, setRating] = useState(0);
+  const [review, setReview] = useState('');
+  const [isSubmittingReview, setIsSubmittingReview] = useState(false);
+
+  const handleSubmitReview = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!currentUser) return;
+
+    setIsSubmittingReview(true);
+    try {
+      // Mock API call
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      alert('Review submitted successfully!');
+      setRating(0);
+      setReview('');
+    } catch (error) {
+      alert('Failed to submit review');
+    } finally {
+      setIsSubmittingReview(false);
+    }
+  };
+
+  const renderStars = (rating: number, interactive = false, onStarClick?: (star: number) => void) => {
+    return Array.from({ length: 5 }, (_, i) => (
+      <span
+        key={i}
+        className={`text-xl cursor-pointer ${i < rating ? 'text-yellow-400' : 'text-gray-300'} ${interactive ? 'hover:text-yellow-300' : ''}`}
+        onClick={() => interactive && onStarClick && onStarClick(i + 1)}
+      >
+        ★
+      </span>
+    ));
+  };
+
+  return (
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <button
+          onClick={onBack}
+          className="mb-6 flex items-center text-primary hover:text-primary-dark"
+        >
+          ← Back to Directory
+        </button>
+
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8">
+          {/* Header */}
+          <div className="flex items-start space-x-6 mb-8">
+            <div className="w-24 h-24 bg-primary rounded-full flex items-center justify-center text-white font-bold text-2xl">
+              {lawyer.name.split(' ').map(n => n[0]).join('')}
+            </div>
+            <div className="flex-1">
+              <div className="flex items-center space-x-3 mb-2">
+                <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+                  {lawyer.name}
+                </h1>
+                {lawyer.isVerified && (
+                  <span className="text-green-500 text-lg">✓ Verified</span>
+                )}
+              </div>
+              <p className="text-xl text-gray-600 dark:text-gray-400 mb-2">
+                {lawyer.specialization}
+              </p>
+              <div className="flex items-center mb-4">
+                {renderStars(Math.floor(lawyer.rating))}
+                <span className="ml-2 text-gray-600 dark:text-gray-400">
+                  {lawyer.rating} ({lawyer.reviewCount} reviews)
+                </span>
+              </div>
+              <div className="flex space-x-4">
+                <span className="px-3 py-1 bg-primary/10 text-primary rounded">
+                  {lawyer.experienceYears} years experience
+                </span>
+                <span className="px-3 py-1 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded">
+                  License: {lawyer.licenseNumber}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          {/* Contact Info */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+            <div>
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+                Contact Information
+              </h3>
+              <div className="space-y-3">
+                <div>
+                  <span className="font-medium text-gray-700 dark:text-gray-300">Email:</span>
+                  <p className="text-gray-600 dark:text-gray-400">{lawyer.email}</p>
+                </div>
+                <div>
+                  <span className="font-medium text-gray-700 dark:text-gray-300">Phone:</span>
+                  <p className="text-gray-600 dark:text-gray-400">{lawyer.phone}</p>
+                </div>
+                <div>
+                  <span className="font-medium text-gray-700 dark:text-gray-300">Office:</span>
+                  <p className="text-gray-600 dark:text-gray-400">{lawyer.officeAddress}</p>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+                Languages & Practice Areas
+              </h3>
+              <div className="space-y-3">
+                <div>
+                  <span className="font-medium text-gray-700 dark:text-gray-300">Languages:</span>
+                  <div className="flex flex-wrap gap-2 mt-1">
+                    {lawyer.languages.map(lang => (
+                      <span key={lang} className="px-2 py-1 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 text-sm rounded">
+                        {lang}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+                <div>
+                  <span className="font-medium text-gray-700 dark:text-gray-300">Practice Areas:</span>
+                  <div className="flex flex-wrap gap-2 mt-1">
+                    {lawyer.practiceAreas.map(area => (
+                      <span key={area} className="px-2 py-1 bg-primary/10 text-primary text-sm rounded">
+                        {area}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Description */}
+          <div className="mb-8">
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+              About
+            </h3>
+            <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
+              {lawyer.description}
+            </p>
+          </div>
+
+          {/* Rating Form */}
+          {currentUser && (
+            <div className="border-t border-gray-200 dark:border-gray-700 pt-8">
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+                Rate this Lawyer
+              </h3>
+              <form onSubmit={handleSubmitReview} className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    Your Rating
+                  </label>
+                  <div className="flex space-x-1">
+                    {renderStars(rating, true, setRating)}
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    Your Review (Optional)
+                  </label>
+                  <textarea
+                    value={review}
+                    onChange={(e) => setReview(e.target.value)}
+                    className="input-field"
+                    rows={4}
+                    placeholder="Share your experience with this lawyer..."
+                  />
+                </div>
+                <button
+                  type="submit"
+                  disabled={rating === 0 || isSubmittingReview}
+                  className="btn-primary disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {isSubmittingReview ? 'Submitting...' : 'Submit Review'}
+                </button>
+              </form>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
 
 const LawyerDirectoryScreen: React.FC<LawyerDirectoryScreenProps> = ({ onBecomeLawyer }) => {
   const { user } = useAuth();
@@ -542,194 +732,6 @@ const LawyerDirectoryScreen: React.FC<LawyerDirectoryScreenProps> = ({ onBecomeL
             ))}
           </div>
         )}
-      </div>
-    </div>
-  );
-
-// Lawyer Detail Component
-const LawyerDetailView: React.FC<{
-  lawyer: Lawyer;
-  onBack: () => void;
-  currentUser: any;
-}> = ({ lawyer, onBack, currentUser }) => {
-  const [rating, setRating] = useState(0);
-  const [review, setReview] = useState('');
-  const [isSubmittingReview, setIsSubmittingReview] = useState(false);
-
-  const handleSubmitReview = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!currentUser) return;
-
-    setIsSubmittingReview(true);
-    try {
-      // Mock API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      alert('Review submitted successfully!');
-      setRating(0);
-      setReview('');
-    } catch (error) {
-      alert('Failed to submit review');
-    } finally {
-      setIsSubmittingReview(false);
-    }
-  };
-
-  const renderStars = (rating: number, interactive = false, onStarClick?: (star: number) => void) => {
-    return Array.from({ length: 5 }, (_, i) => (
-      <span
-        key={i}
-        className={`text-xl cursor-pointer ${i < rating ? 'text-yellow-400' : 'text-gray-300'} ${interactive ? 'hover:text-yellow-300' : ''}`}
-        onClick={() => interactive && onStarClick && onStarClick(i + 1)}
-      >
-        ★
-      </span>
-    ));
-  };
-
-  return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <button
-          onClick={onBack}
-          className="mb-6 flex items-center text-primary hover:text-primary-dark"
-        >
-          ← Back to Directory
-        </button>
-
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8">
-          {/* Header */}
-          <div className="flex items-start space-x-6 mb-8">
-            <div className="w-24 h-24 bg-primary rounded-full flex items-center justify-center text-white font-bold text-2xl">
-              {lawyer.name.split(' ').map(n => n[0]).join('')}
-            </div>
-            <div className="flex-1">
-              <div className="flex items-center space-x-3 mb-2">
-                <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
-                  {lawyer.name}
-                </h1>
-                {lawyer.isVerified && (
-                  <span className="text-green-500 text-lg">✓ Verified</span>
-                )}
-              </div>
-              <p className="text-xl text-gray-600 dark:text-gray-400 mb-2">
-                {lawyer.specialization}
-              </p>
-              <div className="flex items-center mb-4">
-                {renderStars(Math.floor(lawyer.rating))}
-                <span className="ml-2 text-gray-600 dark:text-gray-400">
-                  {lawyer.rating} ({lawyer.reviewCount} reviews)
-                </span>
-              </div>
-              <div className="flex space-x-4">
-                <span className="px-3 py-1 bg-primary/10 text-primary rounded">
-                  {lawyer.experienceYears} years experience
-                </span>
-                <span className="px-3 py-1 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded">
-                  License: {lawyer.licenseNumber}
-                </span>
-              </div>
-            </div>
-          </div>
-
-          {/* Contact Info */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
-            <div>
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-                Contact Information
-              </h3>
-              <div className="space-y-3">
-                <div>
-                  <span className="font-medium text-gray-700 dark:text-gray-300">Email:</span>
-                  <p className="text-gray-600 dark:text-gray-400">{lawyer.email}</p>
-                </div>
-                <div>
-                  <span className="font-medium text-gray-700 dark:text-gray-300">Phone:</span>
-                  <p className="text-gray-600 dark:text-gray-400">{lawyer.phone}</p>
-                </div>
-                <div>
-                  <span className="font-medium text-gray-700 dark:text-gray-300">Office:</span>
-                  <p className="text-gray-600 dark:text-gray-400">{lawyer.officeAddress}</p>
-                </div>
-              </div>
-            </div>
-
-            <div>
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-                Languages & Practice Areas
-              </h3>
-              <div className="space-y-3">
-                <div>
-                  <span className="font-medium text-gray-700 dark:text-gray-300">Languages:</span>
-                  <div className="flex flex-wrap gap-2 mt-1">
-                    {lawyer.languages.map(lang => (
-                      <span key={lang} className="px-2 py-1 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 text-sm rounded">
-                        {lang}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-                <div>
-                  <span className="font-medium text-gray-700 dark:text-gray-300">Practice Areas:</span>
-                  <div className="flex flex-wrap gap-2 mt-1">
-                    {lawyer.practiceAreas.map(area => (
-                      <span key={area} className="px-2 py-1 bg-primary/10 text-primary text-sm rounded">
-                        {area}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Description */}
-          <div className="mb-8">
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-              About
-            </h3>
-            <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
-              {lawyer.description}
-            </p>
-          </div>
-
-          {/* Rating Form */}
-          {currentUser && (
-            <div className="border-t border-gray-200 dark:border-gray-700 pt-8">
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-                Rate this Lawyer
-              </h3>
-              <form onSubmit={handleSubmitReview} className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    Your Rating
-                  </label>
-                  <div className="flex space-x-1">
-                    {renderStars(rating, true, setRating)}
-                  </div>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    Your Review (Optional)
-                  </label>
-                  <textarea
-                    value={review}
-                    onChange={(e) => setReview(e.target.value)}
-                    className="input-field"
-                    rows={4}
-                    placeholder="Share your experience with this lawyer..."
-                  />
-                </div>
-                <button
-                  type="submit"
-                  disabled={rating === 0 || isSubmittingReview}
-                  className="btn-primary disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  {isSubmittingReview ? 'Submitting...' : 'Submit Review'}
-                </button>
-              </form>
-            </div>
-          )}
-        </div>
       </div>
     </div>
   );
