@@ -1,0 +1,59 @@
+[plugin:vite:react-babel] C:\Users\Abdou Karim\Desktop\legalassistance\src\components\lawyers\LawyerDirectoryScreen.tsx: Unexpected token (548:5)
+  551 |   const { user } = useAuth();
+C:/Users/Abdou Karim/Desktop/legalassistance/src/components/lawyers/LawyerDirectoryScreen.tsx:548:5
+546|        </div>
+547|      </div>
+548|    );</old_str>
+   |       ^
+549|  
+550|  const LawyerDirectoryScreen: React.FC<LawyerDirectoryScreenProps> = ({ onBecomeLawyer }) => {
+    at constructor (C:\Users\Abdou Karim\Desktop\legalassistance\node_modules\@babel\parser\lib\index.js:363:19)
+    at TypeScriptParserMixin.raise (C:\Users\Abdou Karim\Desktop\legalassistance\node_modules\@babel\parser\lib\index.js:6609:19)
+    at TypeScriptParserMixin.unexpected (C:\Users\Abdou Karim\Desktop\legalassistance\node_modules\@babel\parser\lib\index.js:6629:16)
+    at TypeScriptParserMixin.jsxParseIdentifier (C:\Users\Abdou Karim\Desktop\legalassistance\node_modules\@babel\parser\lib\index.js:4581:12)
+    at TypeScriptParserMixin.jsxParseNamespacedName (C:\Users\Abdou Karim\Desktop\legalassistance\node_modules\@babel\parser\lib\index.js:4588:23)
+    at TypeScriptParserMixin.jsxParseElementName (C:\Users\Abdou Karim\Desktop\legalassistance\node_modules\@babel\parser\lib\index.js:4597:21)
+    at TypeScriptParserMixin.jsxParseOpeningElementAt (C:\Users\Abdou Karim\Desktop\legalassistance\node_modules\@babel\parser\lib\index.js:4673:22)
+    at TypeScriptParserMixin.jsxParseElementAt (C:\Users\Abdou Karim\Desktop\legalassistance\node_modules\@babel\parser\lib\index.js:4698:33)
+    at TypeScriptParserMixin.jsxParseElement (C:\Users\Abdou Karim\Desktop\legalassistance\node_modules\@babel\parser\lib\index.js:4761:17)
+    at TypeScriptParserMixin.parseExprAtom (C:\Users\Abdou Karim\Desktop\legalassistance\node_modules\@babel\parser\lib\index.js:4771:19)
+    at TypeScriptParserMixin.parseExprSubscripts (C:\Users\Abdou Karim\Desktop\legalassistance\node_modules\@babel\parser\lib\index.js:11012:23)
+    at TypeScriptParserMixin.parseUpdate (C:\Users\Abdou Karim\Desktop\legalassistance\node_modules\@babel\parser\lib\index.js:10997:21)
+    at TypeScriptParserMixin.parseMaybeUnary (C:\Users\Abdou Karim\Desktop\legalassistance\node_modules\@babel\parser\lib\index.js:10977:23)
+    at TypeScriptParserMixin.parseMaybeUnary (C:\Users\Abdou Karim\Desktop\legalassistance\node_modules\@babel\parser\lib\index.js:9794:18)
+    at TypeScriptParserMixin.parseMaybeUnaryOrPrivate (C:\Users\Abdou Karim\Desktop\legalassistance\node_modules\@babel\parser\lib\index.js:10830:61)
+    at TypeScriptParserMixin.parseExprOps (C:\Users\Abdou Karim\Desktop\legalassistance\node_modules\@babel\parser\lib\index.js:10835:23)
+    at TypeScriptParserMixin.parseMaybeConditional (C:\Users\Abdou Karim\Desktop\legalassistance\node_modules\@babel\parser\lib\index.js:10812:23)
+    at TypeScriptParserMixin.parseMaybeAssign (C:\Users\Abdou Karim\Desktop\legalassistance\node_modules\@babel\parser\lib\index.js:10765:21)
+    at C:\Users\Abdou Karim\Desktop\legalassistance\node_modules\@babel\parser\lib\index.js:9732:39
+    at TypeScriptParserMixin.tryParse (C:\Users\Abdou Karim\Desktop\legalassistance\node_modules\@babel\parser\lib\index.js:6918:20)
+    at TypeScriptParserMixin.parseMaybeAssign (C:\Users\Abdou Karim\Desktop\legalassistance\node_modules\@babel\parser\lib\index.js:9732:18)
+    at TypeScriptParserMixin.parseExpressionBase (C:\Users\Abdou Karim\Desktop\legalassistance\node_modules\@babel\parser\lib\index.js:10718:23)
+    at C:\Users\Abdou Karim\Desktop\legalassistance\node_modules\@babel\parser\lib\index.js:10714:39
+    at TypeScriptParserMixin.allowInAnd (C:\Users\Abdou Karim\Desktop\legalassistance\node_modules\@babel\parser\lib\index.js:12356:16)
+    at TypeScriptParserMixin.parseExpression (C:\Users\Abdou Karim\Desktop\legalassistance\node_modules\@babel\parser\lib\index.js:10714:17)
+    at TypeScriptParserMixin.parseStatementContent (C:\Users\Abdou Karim\Desktop\legalassistance\node_modules\@babel\parser\lib\index.js:12814:23)
+    at TypeScriptParserMixin.parseStatementContent (C:\Users\Abdou Karim\Desktop\legalassistance\node_modules\@babel\parser\lib\index.js:9469:18)
+    at TypeScriptParserMixin.parseStatementLike (C:\Users\Abdou Karim\Desktop\legalassistance\node_modules\@babel\parser\lib\index.js:12685:17)
+    at TypeScriptParserMixin.parseStatementListItem (C:\Users\Abdou Karim\Desktop\legalassistance\node_modules\@babel\parser\lib\index.js:12665:17)
+    at TypeScriptParserMixin.parseBlockOrModuleBlockBody (C:\Users\Abdou Karim\Desktop\legalassistance\node_modules\@babel\parser\lib\index.js:13235:61)
+    at TypeScriptParserMixin.parseBlockBody (C:\Users\Abdou Karim\Desktop\legalassistance\node_modules\@babel\parser\lib\index.js:13228:10)
+    at TypeScriptParserMixin.parseBlock (C:\Users\Abdou Karim\Desktop\legalassistance\node_modules\@babel\parser\lib\index.js:13216:10)
+    at TypeScriptParserMixin.parseFunctionBody (C:\Users\Abdou Karim\Desktop\legalassistance\node_modules\@babel\parser\lib\index.js:12035:24)
+    at TypeScriptParserMixin.parseArrowExpression (C:\Users\Abdou Karim\Desktop\legalassistance\node_modules\@babel\parser\lib\index.js:12010:10)
+    at TypeScriptParserMixin.parseParenAndDistinguishExpression (C:\Users\Abdou Karim\Desktop\legalassistance\node_modules\@babel\parser\lib\index.js:11620:12)
+    at TypeScriptParserMixin.parseExprAtom (C:\Users\Abdou Karim\Desktop\legalassistance\node_modules\@babel\parser\lib\index.js:11262:23)
+    at TypeScriptParserMixin.parseExprAtom (C:\Users\Abdou Karim\Desktop\legalassistance\node_modules\@babel\parser\lib\index.js:4776:20)
+    at TypeScriptParserMixin.parseExprSubscripts (C:\Users\Abdou Karim\Desktop\legalassistance\node_modules\@babel\parser\lib\index.js:11012:23)
+    at TypeScriptParserMixin.parseUpdate (C:\Users\Abdou Karim\Desktop\legalassistance\node_modules\@babel\parser\lib\index.js:10997:21)
+    at TypeScriptParserMixin.parseMaybeUnary (C:\Users\Abdou Karim\Desktop\legalassistance\node_modules\@babel\parser\lib\index.js:10977:23)
+    at TypeScriptParserMixin.parseMaybeUnary (C:\Users\Abdou Karim\Desktop\legalassistance\node_modules\@babel\parser\lib\index.js:9794:18)
+    at TypeScriptParserMixin.parseMaybeUnaryOrPrivate (C:\Users\Abdou Karim\Desktop\legalassistance\node_modules\@babel\parser\lib\index.js:10830:61)
+    at TypeScriptParserMixin.parseExprOps (C:\Users\Abdou Karim\Desktop\legalassistance\node_modules\@babel\parser\lib\index.js:10835:23)
+    at TypeScriptParserMixin.parseMaybeConditional (C:\Users\Abdou Karim\Desktop\legalassistance\node_modules\@babel\parser\lib\index.js:10812:23)
+    at TypeScriptParserMixin.parseMaybeAssign (C:\Users\Abdou Karim\Desktop\legalassistance\node_modules\@babel\parser\lib\index.js:10765:21)
+    at TypeScriptParserMixin.parseMaybeAssign (C:\Users\Abdou Karim\Desktop\legalassistance\node_modules\@babel\parser\lib\index.js:9743:20)
+    at C:\Users\Abdou Karim\Desktop\legalassistance\node_modules\@babel\parser\lib\index.js:10734:39
+    at TypeScriptParserMixin.allowInAnd (C:\Users\Abdou Karim\Desktop\legalassistance\node_modules\@babel\parser\lib\index.js:12356:16)
+    at TypeScriptParserMixin.parseMaybeAssignAllowIn (C:\Users\Abdou Karim\Desktop\legalassistance\node_modules\@babel\parser\lib\index.js:10734:17)
+    at TypeScriptParserMixin.parseVar (C:\Users\Abdou Karim\Desktop\legalassistance\node_modules\@babel\parser\lib\index.js:13303:91
