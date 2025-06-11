@@ -1,31 +1,22 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { Send, Bot, User, Copy, ThumbsUp, ThumbsDown } from 'lucide-react';
-import { ChatService } from '../../services/chatService';
+
+import React, { useState, useEffect, useRef } from 'react';
 import { useAuth } from '../../context/AuthContext';
+import { chatService } from '../../services/chatService';
 
 interface Message {
   id: string;
   text: string;
-  sender: 'user' | 'bot';
+  isUser: boolean;
   timestamp: Date;
-  lawyerResults?: any[];
+  sources?: string[];
 }
 
 const ChatScreen: React.FC = () => {
   const { user } = useAuth();
-  const [messages, setMessages] = useState<Message[]>([
-    {
-      id: '1',
-      text: 'Hello! I\'m your legal assistant. I can help you with questions about Cameroon law, including family law, criminal law, property law, and business law. How can I assist you today?',
-      sender: 'bot',
-      timestamp: new Date()
-    }
-  ]);
+  const [messages, setMessages] = useState<Message[]>([]);
   const [inputMessage, setInputMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [currentSessionId, setCurrentSessionId] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
-  const chatService = new ChatService();
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -36,31 +27,25 @@ const ChatScreen: React.FC = () => {
   }, [messages]);
 
   useEffect(() => {
-    // Create initial session when component mounts
-    if (user && !currentSessionId) {
-      createNewSession();
-    }
-  }, [user]);
+    // Add welcome message
+    const welcomeMessage: Message = {
+      id: 'welcome',
+      text: "Hello! I'm your Legal Assistant. I can help you with questions about Cameroon's legal system, laws, and legal procedures. What would you like to know?",
+      isUser: false,
+      timestamp: new Date(),
+    };
+    setMessages([welcomeMessage]);
+  }, []);
 
-  const createNewSession = async () => {
-    if (!user) return;
-
-    try {
-      const session = await chatService.createSession(user.id, 'New Chat Session');
-      setCurrentSessionId(session.id);
-    } catch (error) {
-      console.error('Error creating session:', error);
-    }
-  };
-
-  const sendMessage = async () => {
-    if (!inputMessage.trim()) return;
+  const handleSendMessage = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!inputMessage.trim() || isLoading) return;
 
     const userMessage: Message = {
       id: Date.now().toString(),
       text: inputMessage,
-      sender: 'user',
-      timestamp: new Date()
+      isUser: true,
+      timestamp: new Date(),
     };
 
     setMessages(prev => [...prev, userMessage]);
@@ -68,36 +53,24 @@ const ChatScreen: React.FC = () => {
     setIsLoading(true);
 
     try {
-      const response = await chatService.sendMessage(
-        inputMessage, 
-        currentSessionId, 
-        user?.id
-      );
-
-      let botResponseText = response.response;
-
-      // If lawyer results are returned, format them nicely
-      if (response.lawyerResults && response.lawyerResults.length > 0) {
-        // The response already includes formatted lawyer results
-        // Just use it as is
-      }
-
-      const botMessage: Message = {
+      const response = await chatService.sendMessage(inputMessage, user?.id || 'anonymous');
+      
+      const assistantMessage: Message = {
         id: (Date.now() + 1).toString(),
-        text: botResponseText,
-        sender: 'bot',
+        text: response.message,
+        isUser: false,
         timestamp: new Date(),
-        lawyerResults: response.lawyerResults
+        sources: response.sources,
       };
 
-      setMessages(prev => [...prev, botMessage]);
-      setCurrentSessionId(response.sessionId);
+      setMessages(prev => [...prev, assistantMessage]);
     } catch (error) {
+      console.error('Error sending message:', error);
       const errorMessage: Message = {
         id: (Date.now() + 1).toString(),
-        text: 'Sorry, I encountered an error. Please try again. Make sure you are logged in to save your chat history.',
-        sender: 'bot',
-        timestamp: new Date()
+        text: "I'm sorry, I encountered an error while processing your request. Please try again.",
+        isUser: false,
+        timestamp: new Date(),
       };
       setMessages(prev => [...prev, errorMessage]);
     } finally {
@@ -105,76 +78,117 @@ const ChatScreen: React.FC = () => {
     }
   };
 
-  const generateLegalResponse = (message: string): string => {
-    const normalizedMessage = message.toLowerCase();
-
-    if (normalizedMessage.includes('hello') || normalizedMessage.includes('hi')) {
-      return "Hello! I'm your Cameroon legal assistant. How can I help you with legal information today?";
-    } else if (normalizedMessage.includes('theft') || normalizedMessage.includes('stealing')) {
-      return "**Theft in Cameroon Law**\n\nTheft is addressed in Section 318 of the Cameroon Penal Code.\n\n**Definition:** Theft is defined as fraudulently taking property belonging to another person.\n\n**Penalties:**\n- Simple theft: Imprisonment from 5 to 10 years and a fine\n- Aggravated theft (with weapons or at night): Imprisonment from 10 to 20 years\n\nIf you're dealing with a theft case, it's advisable to consult with a licensed attorney in Cameroon for specific advice.";
-    } else if (normalizedMessage.includes('marriage') || normalizedMessage.includes('divorce')) {
-      return "**Marriage and Divorce in Cameroon**\n\nCameroon recognizes both civil marriages and traditional marriages.\n\n**Marriage Requirements:**\n- Minimum age: 18 for males, 15 for females (with parental consent)\n- No existing marriages (prohibition of polygamy in civil marriages)\n- Consent of both parties\n\n**Divorce:**\n- Grounds include adultery, abandonment, and cruelty\n- Both judicial and traditional divorce procedures exist\n- Child custody typically favors the mother for young children\n\nThe Civil Status Registration Ordinance (No. 81-02) governs civil marriages and divorces in Cameroon.";
-    } else if (normalizedMessage.includes('assault') || normalizedMessage.includes('battery') || normalizedMessage.includes('fight')) {
-      return "**Assault in Cameroon Law**\n\nAssault is covered under Section 337 of the Cameroon Penal Code.\n\n**Definition:** Assault refers to any force intentionally applied to another person without their consent.\n\n**Penalties:**\n- Simple assault: Imprisonment from 6 days to 3 years and a fine\n- Aggravated assault (causing serious harm): Imprisonment from 5 to 10 years\n- Assault resulting in death unintentionally: Imprisonment from 6 to 20 years\n\nSelf-defense is recognized as a legal justification under certain circumstances, outlined in Section 84 of the Penal Code.";
-    } else {
-      return "Thank you for your question about Cameroon's legal system. To provide you with accurate information, I would need to research specific Cameroon laws and regulations related to this topic. In a full implementation, I would connect to comprehensive legal databases and resources specific to Cameroon's legal code.\n\nIf you have questions about a specific area of law, such as criminal law, family law, property rights, or business regulations, please let me know and I can provide more targeted information.";
-    }
+  const formatMessage = (text: string) => {
+    // Simple formatting for legal references
+    return text.replace(/Article (\d+)/g, '<strong>Article $1</strong>')
+               .replace(/Section (\d+)/g, '<strong>Section $1</strong>');
   };
+
   return (
+    <div className="flex flex-col h-screen bg-gray-50 dark:bg-gray-900">
+      {/* Header */}
+      <div className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 p-4">
+        <div className="max-w-4xl mx-auto">
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+            Legal Assistant
+          </h1>
+          <p className="text-gray-600 dark:text-gray-400 mt-1">
+            Ask questions about Cameroon's legal system, laws, and offences. I'll provide information and references to relevant legal provisions.
+          </p>
+        </div>
+      </div>
 
+      {/* Messages */}
+      <div className="flex-1 overflow-y-auto p-4">
+        <div className="max-w-4xl mx-auto space-y-4">
+          {messages.map((message) => (
+            <div
+              key={message.id}
+              className={`flex ${message.isUser ? 'justify-end' : 'justify-start'}`}
+            >
+              <div
+                className={`max-w-3xl p-4 rounded-lg ${
+                  message.isUser
+                    ? 'bg-primary text-white ml-12'
+                    : 'bg-white dark:bg-gray-800 text-gray-900 dark:text-white shadow-sm mr-12'
+                }`}
+              >
+                <div
+                  className="prose dark:prose-invert max-w-none"
+                  dangerouslySetInnerHTML={{
+                    __html: formatMessage(message.text),
+                  }}
+                />
+                
+                {message.sources && message.sources.length > 0 && (
+                  <div className="mt-3 pt-3 border-t border-gray-200 dark:border-gray-600">
+                    <p className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                      Legal References:
+                    </p>
+                    <ul className="text-sm text-gray-600 dark:text-gray-400 space-y-1">
+                      {message.sources.map((source, index) => (
+                        <li key={index} className="flex items-start">
+                          <span className="mr-2">•</span>
+                          <span>{source}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+                
+                <div className="text-xs opacity-70 mt-2">
+                  {message.timestamp.toLocaleTimeString()}
+                </div>
+              </div>
+            </div>
+          ))}
+          
+          {isLoading && (
+            <div className="flex justify-start">
+              <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm mr-12">
+                <div className="flex items-center space-x-2">
+                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-primary"></div>
+                  <span className="text-gray-600 dark:text-gray-400">
+                    Legal Assistant is thinking...
+                  </span>
+                </div>
+              </div>
+            </div>
+          )}
+          
+          <div ref={messagesEndRef} />
+        </div>
+      </div>
 
-        Legal Assistant
-        Ask questions about Cameroon's legal system, laws, and offences. I'll provide information and references to relevant legal provisions.
-
-
-
-        {messages.map((message) => (
-
-
-              {message.sender === 'user' ?  : }
-
-
-
-                {message.text}
-
-              {message.timestamp.toLocaleTimeString()}
-
-
-        ))}
-
-        {isLoading && (
-
-
-
-
-
-
-
-
-
-
-
-
-        )}
-
-
-
-
-
-
-
-            onChange={(e) => setInputMessage(e.target.value)}
-            onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
-            placeholder="Ask a legal question..."
-
-            disabled={isLoading}
-          />
-
-
-
-
-
-
+      {/* Input */}
+      <div className="bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 p-4">
+        <div className="max-w-4xl mx-auto">
+          <form onSubmit={handleSendMessage} className="flex space-x-4">
+            <input
+              type="text"
+              value={inputMessage}
+              onChange={(e) => setInputMessage(e.target.value)}
+              placeholder="Ask about Cameroon's laws, legal procedures, or specific legal questions..."
+              className="flex-1 px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400"
+              disabled={isLoading}
+            />
+            <button
+              type="submit"
+              disabled={!inputMessage.trim() || isLoading}
+              className="bg-primary hover:bg-primary-dark disabled:bg-gray-300 disabled:cursor-not-allowed text-white px-6 py-3 rounded-lg font-medium transition-colors flex items-center"
+            >
+              {isLoading ? (
+                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+              ) : (
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                </svg>
+              )}
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
   );
 };
 
