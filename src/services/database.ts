@@ -1,4 +1,3 @@
-
 import { pool } from '../lib/mysql';
 
 export class DatabaseService {
@@ -62,7 +61,7 @@ export class DatabaseService {
           INDEX idx_search_query (search_query(100)),
           INDEX idx_user_searches (user_id, search_query(50))
         )
-      `);</old_str>
+      `);
 
       // Create verification_codes table
       await pool.execute(`
@@ -129,7 +128,7 @@ export class DatabaseService {
         'SELECT * FROM users WHERE id = ?',
         [userId]
       );
-      
+
       return (users as any[]).length > 0 ? (users as any[])[0] : null;
     } catch (error) {
       console.error('Error fetching user:', error);
@@ -143,7 +142,7 @@ export class DatabaseService {
         'SELECT * FROM users WHERE email = ?',
         [email]
       );
-      
+
       return (users as any[]).length > 0 ? (users as any[])[0] : null;
     } catch (error) {
       console.error('Error fetching user by email:', error);
@@ -155,7 +154,7 @@ export class DatabaseService {
     try {
       const setClause = Object.keys(updates).map(key => `${key} = ?`).join(', ');
       const values = Object.values(updates);
-      
+
       await pool.execute(
         `UPDATE users SET ${setClause} WHERE id = ?`,
         [...values, userId]
@@ -189,7 +188,7 @@ export class DatabaseService {
           profileData.profileImage
         ]
       );
-      
+
       return result;
     } catch (error) {
       console.error('Error creating lawyer profile:', error);
@@ -207,7 +206,7 @@ export class DatabaseService {
         JOIN users u ON lp.user_id = u.id
         LEFT JOIN lawyer_ratings r ON lp.id = r.lawyer_id
       `;
-      
+
       const conditions = [];
       const values = [];
 
@@ -234,7 +233,7 @@ export class DatabaseService {
       query += ' GROUP BY lp.id ORDER BY average_rating DESC, lp.created_at DESC';
 
       const [lawyers] = await pool.execute(query, values);
-      
+
       return (lawyers as any[]).map(lawyer => ({
         ...lawyer,
         practice_areas: JSON.parse(lawyer.practice_areas || '[]'),
@@ -259,13 +258,13 @@ export class DatabaseService {
          GROUP BY lp.id`,
         [lawyerId]
       );
-      
+
       const lawyer = (lawyers as any[])[0];
       if (lawyer) {
         lawyer.practice_areas = JSON.parse(lawyer.practice_areas || '[]');
         lawyer.languages = JSON.parse(lawyer.languages || '[]');
       }
-      
+
       return lawyer || null;
     } catch (error) {
       console.error('Error fetching lawyer profile:', error);
@@ -287,7 +286,7 @@ export class DatabaseService {
           ratingData.review
         ]
       );
-      
+
       return result;
     } catch (error) {
       console.error('Error creating lawyer rating:', error);
@@ -305,7 +304,7 @@ export class DatabaseService {
          ORDER BY r.created_at DESC`,
         [lawyerId]
       );
-      
+
       return ratings as any[];
     } catch (error) {
       console.error('Error fetching lawyer ratings:', error);
@@ -317,7 +316,7 @@ export class DatabaseService {
     try {
       const setClause = Object.keys(updates).map(key => `${key} = ?`).join(', ');
       const values = Object.values(updates);
-      
+
       await pool.execute(
         `UPDATE lawyer_profiles SET ${setClause}, updated_at = NOW() WHERE id = ?`,
         [...values, lawyerId]
@@ -336,7 +335,7 @@ export class DatabaseService {
          VALUES (?, ?, ?, NOW(), NOW())`,
         [sessionData.id, sessionData.userId, sessionData.title]
       );
-      
+
       return result;
     } catch (error) {
       console.error('Error creating chat session:', error);
@@ -352,7 +351,7 @@ export class DatabaseService {
          ORDER BY updated_at DESC`,
         [userId]
       );
-      
+
       return sessions as any[];
     } catch (error) {
       console.error('Error fetching chat sessions:', error);
@@ -391,7 +390,7 @@ export class DatabaseService {
 
       // Update session timestamp
       await this.updateChatSession(messageData.sessionId);
-      
+
       return result;
     } catch (error) {
       console.error('Error creating chat message:', error);
@@ -407,7 +406,7 @@ export class DatabaseService {
          ORDER BY created_at ASC`,
         [sessionId]
       );
-      
+
       return (messages as any[]).map(message => ({
         ...message,
         lawyerSearchResults: message.lawyer_search_results ? 
@@ -430,7 +429,7 @@ export class DatabaseService {
          LIMIT 50`,
         [userId]
       );
-      
+
       return (searches as any[]).map(search => ({
         ...search,
         lawyerSearchResults: search.lawyer_search_results ? 
@@ -441,4 +440,4 @@ export class DatabaseService {
       throw error;
     }
   }
-}</old_str>
+}
