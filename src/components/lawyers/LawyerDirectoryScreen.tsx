@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
 
@@ -129,7 +128,7 @@ const LawyerDirectoryScreen: React.FC<LawyerDirectoryScreenProps> = ({ onBecomeL
 
       // Apply all filters and search
       let filteredLawyers = mockLawyers;
-      
+
       // Search functionality - search across multiple fields
       if (searchTerm.trim()) {
         const searchTermLower = searchTerm.toLowerCase().trim();
@@ -207,7 +206,7 @@ const LawyerDirectoryScreen: React.FC<LawyerDirectoryScreenProps> = ({ onBecomeL
               Connect with qualified lawyers in Cameroon
             </p>
           </div>
-          
+
           {/* Add Lawyer Button */}
           <button
             onClick={onBecomeLawyer}
@@ -402,7 +401,7 @@ const LawyerDirectoryScreen: React.FC<LawyerDirectoryScreenProps> = ({ onBecomeL
                 <span> matching your criteria</span>
               )}
             </div>
-            
+
             {lawyers.length > 0 && (
               <div className="flex items-center space-x-2">
                 <span className="text-sm text-gray-600 dark:text-gray-400">Sort by:</span>
@@ -545,7 +544,7 @@ const LawyerDirectoryScreen: React.FC<LawyerDirectoryScreenProps> = ({ onBecomeL
         )}
       </div>
     </div>
-  );</old_str>
+  );
 
 const LawyerDirectoryScreen: React.FC<LawyerDirectoryScreenProps> = ({ onBecomeLawyer }) => {
   const { user } = useAuth();
@@ -589,7 +588,7 @@ const LawyerDirectoryScreen: React.FC<LawyerDirectoryScreenProps> = ({ onBecomeL
       try {
         // Mock API delay
         await new Promise(resolve => setTimeout(resolve, 1000));
-        
+
         const mockLawyers: Lawyer[] = [
           {
             id: '1',
@@ -640,7 +639,7 @@ const LawyerDirectoryScreen: React.FC<LawyerDirectoryScreenProps> = ({ onBecomeL
             isVerified: true
           }
         ];
-        
+
         setLawyers(mockLawyers);
         setFilteredLawyers(mockLawyers);
       } catch (error) {
