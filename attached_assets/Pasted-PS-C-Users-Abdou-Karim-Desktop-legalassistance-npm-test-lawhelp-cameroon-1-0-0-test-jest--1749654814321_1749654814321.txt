@@ -1,0 +1,223 @@
+PS C:\Users\Abdou Karim\Desktop\legalassistance> npm test
+
+> lawhelp-cameroon@1.0.0 test
+> jest
+
+ FAIL  test/unit/auth.test.js
+  ● Test suite failed to run
+
+    Jest encountered an unexpected token
+
+    Jest failed to parse a file. This happens e.g. when your code or its dependencies use non-standard JavaScript syntax, or when Jest is not configured to support such syntax.
+
+    Out of the box Jest supports Babel, which will be used to transform your files into valid JS based on your Babel configuration.
+
+    By default "node_modules" folder is ignored by transformers.
+
+    Here's what you can do:
+     • If you are trying to use ECMAScript Modules, see https://jestjs.io/docs/ecmascript-modules for how to enable it.
+     • If you are trying to use TypeScript, see https://jestjs.io/docs/getting-started#using-typescript
+     • To have some of your "node_modules" files transformed, you can specify a custom "transformIgnorePatterns" in your config.
+     • If you need a custom transformation specify a "transform" option in your config.
+     • If you simply want to mock your non-JS modules (e.g. binary assets) you can stub them out with the "moduleNameMapper" config option.
+
+    You'll find more details and examples of these config options in the docs:
+    https://jestjs.io/docs/configuration
+    For information about custom transformations, see:
+    https://jestjs.io/docs/code-transformation
+
+    Details:
+
+    C:\Users\Abdou Karim\Desktop\legalassistance\microservices\auth-service\index.js:1
+    ({"Object.<anonymous>":function(module,exports,require,__dirname,__filename,jest){import express from 'express';
+                                                                                      ^^^^^^
+
+    SyntaxError: Cannot use import statement outside a module
+
+      1 |
+      2 | const request = require('supertest');
+    > 3 | const app = require('../../microservices/auth-service/index');
+        |             ^
+      4 | const bcrypt = require('bcryptjs');
+      5 |
+      6 | describe('Authentication Service', () => {
+
+      at Runtime.createScriptFromCode (../node_modules/jest-runtime/build/index.js:1505:14)
+      at Object.<anonymous> (test/unit/auth.test.js:3:13)
+
+ FAIL  test/integration/chat.test.js
+  ● Test suite failed to run
+
+    Jest encountered an unexpected token
+
+    Jest failed to parse a file. This happens e.g. when your code or its dependencies use non-standard JavaScript syntax, or when Jest is not configured to support such syntax.
+
+    Out of the box Jest supports Babel, which will be used to transform your files into valid JS based on your Babel configuration.
+
+    By default "node_modules" folder is ignored by transformers.
+
+    Here's what you can do:
+     • If you are trying to use ECMAScript Modules, see https://jestjs.io/docs/ecmascript-modules for how to enable it.
+     • If you are trying to use TypeScript, see https://jestjs.io/docs/getting-started#using-typescript
+     • To have some of your "node_modules" files transformed, you can specify a custom "transformIgnorePatterns" in your config.
+     • If you need a custom transformation specify a "transform" option in your config.
+     • If you simply want to mock your non-JS modules (e.g. binary assets) you can stub them out with the "moduleNameMapper" config option.
+
+    You'll find more details and examples of these config options in the docs:
+    https://jestjs.io/docs/configuration
+    For information about custom transformations, see:
+    https://jestjs.io/docs/code-transformation
+
+    Details:
+
+    C:\Users\Abdou Karim\Desktop\legalassistance\microservices\chat-service\index.js:2
+    import express from 'express';
+    ^^^^^^
+
+    SyntaxError: Cannot use import statement outside a module
+
+      1 |
+      2 | const request = require('supertest');
+    > 3 | const app = require('../../microservices/chat-service/index');
+        |             ^
+      4 |
+      5 | describe('Chat Service Integration', () => {
+      6 |   let authToken;
+
+      at Runtime.createScriptFromCode (../node_modules/jest-runtime/build/index.js:1505:14)
+      at Object.<anonymous> (test/integration/chat.test.js:3:13)
+
+ FAIL  test/e2e/user-journey.test.js (8.083 s)
+  ● LawHelp User Journey E2E Tests › User Registration and Authentication › should complete full user registration flow
+
+    thrown: "Exceeded timeout of 5000 ms for a hook.
+    Add a timeout value to this test to increase the timeout, if this is a long-running test. See https://jestjs.io/docs/api#testname-fn-timeout."
+
+       7 |   let page;
+       8 |
+    >  9 |   beforeAll(async () => {
+         |   ^
+      10 |     browser = await chromium.launch();
+      11 |     context = await browser.newContext();
+      12 |     page = await context.newPage();
+
+      at test/e2e/user-journey.test.js:9:3
+      at Object.<anonymous> (test/e2e/user-journey.test.js:4:1)
+
+  ● LawHelp User Journey E2E Tests › User Registration and Authentication › should handle login with 2FA
+
+    thrown: "Exceeded timeout of 5000 ms for a hook.
+    Add a timeout value to this test to increase the timeout, if this is a long-running test. See https://jestjs.io/docs/api#testname-fn-timeout."
+
+       7 |   let page;
+       8 |
+    >  9 |   beforeAll(async () => {
+         |   ^
+      10 |     browser = await chromium.launch();
+      11 |     context = await browser.newContext();
+      12 |     page = await context.newPage();
+
+      at test/e2e/user-journey.test.js:9:3
+      at Object.<anonymous> (test/e2e/user-journey.test.js:4:1)
+
+  ● LawHelp User Journey E2E Tests › Chat Functionality › should create new chat and send message
+
+    thrown: "Exceeded timeout of 5000 ms for a hook.
+    Add a timeout value to this test to increase the timeout, if this is a long-running test. See https://jestjs.io/docs/api#testname-fn-timeout."
+
+       7 |   let page;
+       8 |
+    >  9 |   beforeAll(async () => {
+         |   ^
+      10 |     browser = await chromium.launch();
+      11 |     context = await browser.newContext();
+      12 |     page = await context.newPage();
+
+      at test/e2e/user-journey.test.js:9:3
+      at Object.<anonymous> (test/e2e/user-journey.test.js:4:1)
+
+  ● LawHelp User Journey E2E Tests › Chat Functionality › should save and load chat history
+
+    thrown: "Exceeded timeout of 5000 ms for a hook.
+    Add a timeout value to this test to increase the timeout, if this is a long-running test. See https://jestjs.io/docs/api#testname-fn-timeout."
+
+       7 |   let page;
+       8 |
+    >  9 |   beforeAll(async () => {
+         |   ^
+      10 |     browser = await chromium.launch();
+      11 |     context = await browser.newContext();
+      12 |     page = await context.newPage();
+
+      at test/e2e/user-journey.test.js:9:3
+      at Object.<anonymous> (test/e2e/user-journey.test.js:4:1)
+
+  ● LawHelp User Journey E2E Tests › Lawyer Directory › should browse and filter lawyers
+
+    thrown: "Exceeded timeout of 5000 ms for a hook.
+    Add a timeout value to this test to increase the timeout, if this is a long-running test. See https://jestjs.io/docs/api#testname-fn-timeout."
+
+       7 |   let page;
+       8 |
+    >  9 |   beforeAll(async () => {
+         |   ^
+      10 |     browser = await chromium.launch();
+      11 |     context = await browser.newContext();
+      12 |     page = await context.newPage();
+
+      at test/e2e/user-journey.test.js:9:3
+      at Object.<anonymous> (test/e2e/user-journey.test.js:4:1)
+
+  ● LawHelp User Journey E2E Tests › Lawyer Directory › should view lawyer details and submit rating
+
+    thrown: "Exceeded timeout of 5000 ms for a hook.
+    Add a timeout value to this test to increase the timeout, if this is a long-running test. See https://jestjs.io/docs/api#testname-fn-timeout."
+
+       7 |   let page;
+       8 |
+    >  9 |   beforeAll(async () => {
+         |   ^
+      10 |     browser = await chromium.launch();
+      11 |     context = await browser.newContext();
+      12 |     page = await context.newPage();
+
+      at test/e2e/user-journey.test.js:9:3
+      at Object.<anonymous> (test/e2e/user-journey.test.js:4:1)
+
+  ● LawHelp User Journey E2E Tests › Performance Tests › should load homepage within 2 seconds
+
+    thrown: "Exceeded timeout of 5000 ms for a hook.
+    Add a timeout value to this test to increase the timeout, if this is a long-running test. See https://jestjs.io/docs/api#testname-fn-timeout."
+
+       7 |   let page;
+       8 |
+    >  9 |   beforeAll(async () => {
+         |   ^
+      10 |     browser = await chromium.launch();
+      11 |     context = await browser.newContext();
+      12 |     page = await context.newPage();
+
+      at test/e2e/user-journey.test.js:9:3
+      at Object.<anonymous> (test/e2e/user-journey.test.js:4:1)
+
+  ● LawHelp User Journey E2E Tests › Performance Tests › should handle concurrent users
+
+    thrown: "Exceeded timeout of 5000 ms for a hook.
+    Add a timeout value to this test to increase the timeout, if this is a long-running test. See https://jestjs.io/docs/api#testname-fn-timeout."
+
+       7 |   let page;
+       8 |
+    >  9 |   beforeAll(async () => {
+         |   ^
+      10 |     browser = await chromium.launch();
+      11 |     context = await browser.newContext();
+      12 |     page = await context.newPage();
+
+      at test/e2e/user-journey.test.js:9:3
+      at Object.<anonymous> (test/e2e/user-journey.test.js:4:1)
+
+Test Suites: 3 failed, 3 total
+Tests:       8 failed, 8 total
+Snapshots:   0 total
+Time:        9.33 s, estimated 19 s
+Ran all test suites.
