@@ -27,6 +27,295 @@ interface LawyerDirectoryScreenProps {
 const LawyerDirectoryScreen: React.FC<LawyerDirectoryScreenProps> = ({ onBecomeLawyer }) => {
   const { user } = useAuth();
   const [lawyers, setLawyers] = useState<Lawyer[]>([]);
+  const [selectedLawyer, setSelectedLawyer] = useState<Lawyer | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [filters, setFilters] = useState({
+    specialization: '',
+    minExperience: 0,
+    language: ''
+  });
+
+  useEffect(() => {
+    loadLawyers();
+  }, [searchTerm, filters]);
+
+  const loadLawyers = async () => {
+    try {
+      setLoading(true);
+      // Mock API call - replace with actual database call
+      const mockLawyers: Lawyer[] = [
+        {
+          id: '1',
+          name: 'Maitre Jean Dupont',
+          email: 'jean.dupont@lawfirm.cm',
+          licenseNumber: 'BAR001234',
+          specialization: 'Corporate Law',
+          experienceYears: 15,
+          practiceAreas: ['Corporate Law', 'Tax Law', 'Real Estate'],
+          languages: ['French', 'English', 'Duala'],
+          officeAddress: 'Rue de la Réunification, Douala, Cameroon',
+          phone: '+237 691 234 567',
+          description: 'Experienced corporate lawyer with 15+ years helping businesses navigate legal complexities in Cameroon and Central Africa.',
+          rating: 4.8,
+          reviewCount: 45,
+          isVerified: true
+        },
+        {
+          id: '2',
+          name: 'Maitre Marie Ngono',
+          email: 'marie.ngono@advocates.cm',
+          licenseNumber: 'BAR005678',
+          specialization: 'Criminal Law',
+          experienceYears: 12,
+          practiceAreas: ['Criminal Law', 'Civil Rights', 'Family Law'],
+          languages: ['English', 'French', 'Ewondo'],
+          officeAddress: 'Avenue Kennedy, Yaoundé, Cameroon',
+          phone: '+237 677 345 678',
+          description: 'Dedicated criminal defense attorney committed to protecting your rights and ensuring fair legal representation.',
+          rating: 4.6,
+          reviewCount: 32,
+          isVerified: true
+        }
+      ];
+
+      // Filter lawyers based on search and filters
+      let filteredLawyers = mockLawyers;
+      
+      if (searchTerm) {
+        filteredLawyers = filteredLawyers.filter(lawyer =>
+          lawyer.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          lawyer.specialization.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          lawyer.description.toLowerCase().includes(searchTerm.toLowerCase())
+        );
+      }
+
+      if (filters.specialization) {
+        filteredLawyers = filteredLawyers.filter(lawyer =>
+          lawyer.specialization === filters.specialization
+        );
+      }
+
+      if (filters.minExperience > 0) {
+        filteredLawyers = filteredLawyers.filter(lawyer =>
+          lawyer.experienceYears >= filters.minExperience
+        );
+      }
+
+      if (filters.language) {
+        filteredLawyers = filteredLawyers.filter(lawyer =>
+          lawyer.languages.includes(filters.language)
+        );
+      }
+
+      setLawyers(filteredLawyers);
+    } catch (error) {
+      console.error('Error loading lawyers:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const renderStars = (rating: number) => {
+    return Array.from({ length: 5 }, (_, i) => (
+      <span
+        key={i}
+        className={`text-sm ${i < rating ? 'text-yellow-400' : 'text-gray-300'}`}
+      >
+        ★
+      </span>
+    ));
+  };
+
+  if (selectedLawyer) {
+    return (
+      <LawyerDetailView
+        lawyer={selectedLawyer}
+        onBack={() => setSelectedLawyer(null)}
+        currentUser={user}
+      />
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Header with Add Lawyer Button */}
+        <div className="flex justify-between items-center mb-8">
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+              Find Legal Experts
+            </h1>
+            <p className="text-gray-600 dark:text-gray-400 mt-2">
+              Connect with qualified lawyers in Cameroon
+            </p>
+          </div>
+          
+          {/* Add Lawyer Button */}
+          <button
+            onClick={onBecomeLawyer}
+            className="bg-primary hover:bg-primary-dark text-white px-6 py-3 rounded-lg font-medium transition-colors flex items-center gap-2"
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+            </svg>
+            Become a Lawyer
+          </button>
+        </div>
+
+        {/* Search and Filters */}
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6 mb-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            {/* Search Input */}
+            <div>
+              <input
+                type="text"
+                placeholder="Search lawyers..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="input-field"
+              />
+            </div>
+
+            {/* Specialization Filter */}
+            <div>
+              <select
+                value={filters.specialization}
+                onChange={(e) => setFilters(prev => ({ ...prev, specialization: e.target.value }))}
+                className="input-field"
+              >
+                <option value="">All Specializations</option>
+                <option value="Corporate Law">Corporate Law</option>
+                <option value="Criminal Law">Criminal Law</option>
+                <option value="Family Law">Family Law</option>
+                <option value="Immigration Law">Immigration Law</option>
+                <option value="Civil Rights">Civil Rights</option>
+                <option value="Personal Injury">Personal Injury</option>
+                <option value="Real Estate">Real Estate</option>
+                <option value="Employment Law">Employment Law</option>
+              </select>
+            </div>
+
+            {/* Experience Filter */}
+            <div>
+              <select
+                value={filters.minExperience}
+                onChange={(e) => setFilters(prev => ({ ...prev, minExperience: parseInt(e.target.value) }))}
+                className="input-field"
+              >
+                <option value="0">Any Experience</option>
+                <option value="5">5+ Years</option>
+                <option value="10">10+ Years</option>
+                <option value="15">15+ Years</option>
+                <option value="20">20+ Years</option>
+              </select>
+            </div>
+
+            {/* Language Filter */}
+            <div>
+              <select
+                value={filters.language}
+                onChange={(e) => setFilters(prev => ({ ...prev, language: e.target.value }))}
+                className="input-field"
+              >
+                <option value="">Any Language</option>
+                <option value="English">English</option>
+                <option value="French">French</option>
+                <option value="Duala">Duala</option>
+                <option value="Ewondo">Ewondo</option>
+                <option value="Fulfulde">Fulfulde</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        {/* Lawyers Grid */}
+        {loading ? (
+          <div className="text-center py-12">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto"></div>
+            <p className="text-gray-600 dark:text-gray-400 mt-4">Loading lawyers...</p>
+          </div>
+        ) : lawyers.length === 0 ? (
+          <div className="text-center py-12">
+            <p className="text-gray-600 dark:text-gray-400">No lawyers found matching your criteria.</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {lawyers.map((lawyer) => (
+              <div
+                key={lawyer.id}
+                className="bg-white dark:bg-gray-800 rounded-lg shadow hover:shadow-lg transition-shadow cursor-pointer"
+                onClick={() => setSelectedLawyer(lawyer)}
+              >
+                <div className="p-6">
+                  <div className="flex items-start justify-between mb-4">
+                    <div className="flex-1">
+                      <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-1">
+                        {lawyer.name}
+                      </h3>
+                      <p className="text-primary font-medium">
+                        {lawyer.specialization}
+                      </p>
+                      <div className="flex items-center mt-1">
+                        {renderStars(Math.floor(lawyer.rating))}
+                        <span className="ml-2 text-sm text-gray-600 dark:text-gray-400">
+                          {lawyer.rating} ({lawyer.reviewCount} reviews)
+                        </span>
+                      </div>
+                    </div>
+                    {lawyer.isVerified && (
+                      <div className="bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 px-2 py-1 rounded-full text-xs font-medium">
+                        Verified
+                      </div>
+                    )}
+                  </div>
+
+                  <p className="text-gray-600 dark:text-gray-400 text-sm mb-4 line-clamp-3">
+                    {lawyer.description}
+                  </p>
+
+                  <div className="space-y-2">
+                    <div className="flex items-center text-sm text-gray-600 dark:text-gray-400">
+                      <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2-2v2m8 0V6a2 2 0 012 2v6a2 2 0 01-2 2H8a2 2 0 01-2-2V8a2 2 0 012-2V6" />
+                      </svg>
+                      {lawyer.experienceYears} years experience
+                    </div>
+                    <div className="flex items-center text-sm text-gray-600 dark:text-gray-400">
+                      <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                      </svg>
+                      {lawyer.officeAddress.split(',')[1]?.trim()}
+                    </div>
+                    <div className="flex flex-wrap gap-1 mt-2">
+                      {lawyer.languages.slice(0, 3).map((lang) => (
+                        <span
+                          key={lang}
+                          className="bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 px-2 py-1 rounded-full text-xs"
+                        >
+                          {lang}
+                        </span>
+                      ))}
+                      {lawyer.languages.length > 3 && (
+                        <span className="text-gray-500 text-xs px-2 py-1">
+                          +{lawyer.languages.length - 3} more
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  );</old_str>
+
+const LawyerDirectoryScreen: React.FC<LawyerDirectoryScreenProps> = ({ onBecomeLawyer }) => {
+  const { user } = useAuth();
+  const [lawyers, setLawyers] = useState<Lawyer[]>([]);
   const [filteredLawyers, setFilteredLawyers] = useState<Lawyer[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');

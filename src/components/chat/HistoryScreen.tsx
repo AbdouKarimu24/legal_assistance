@@ -1,8 +1,17 @@
-
 import React, { useState, useEffect } from 'react';
 import { MessageSquare, Clock, Search, Trash2, Edit3 } from 'lucide-react';
 import { ChatService, ChatSession, ChatMessage } from '../../services/chatService';
 import { useAuth } from '../../context/AuthContext';
+import { DatabaseService } from '../../services/database';
+
+interface SearchHistory {
+  id: string;
+  search_query: string;
+  session_title: string;
+  lawyer_search_results: any[];
+  created_at: Date;
+  message: string;
+}
 
 const HistoryScreen: React.FC = () => {
   const { user } = useAuth();
@@ -14,16 +23,19 @@ const HistoryScreen: React.FC = () => {
   const [editingSessionId, setEditingSessionId] = useState<string | null>(null);
   const [editTitle, setEditTitle] = useState('');
   const chatService = new ChatService();
+  const [searchHistory, setSearchHistory] = useState<SearchHistory[]>([]);
+  const [activeTab, setActiveTab] = useState<'chats' | 'searches'>('chats');
 
   useEffect(() => {
     if (user) {
       loadSessions();
+      loadSearchHistory();
     }
   }, [user]);
 
   const loadSessions = async () => {
     if (!user) return;
-    
+
     setIsLoading(true);
     try {
       const userSessions = await chatService.getUserSessions(user.id);
@@ -50,7 +62,7 @@ const HistoryScreen: React.FC = () => {
 
   const deleteSession = async (sessionId: string) => {
     if (!user || !window.confirm('Are you sure you want to delete this chat session?')) return;
-    
+
     try {
       await chatService.deleteSession(sessionId, user.id);
       setSessions(sessions.filter(s => s.id !== sessionId));
@@ -65,7 +77,7 @@ const HistoryScreen: React.FC = () => {
 
   const updateSessionTitle = async (sessionId: string, newTitle: string) => {
     if (!user || !newTitle.trim()) return;
-    
+
     try {
       await chatService.updateSessionTitle(sessionId, user.id, newTitle);
       setSessions(sessions.map(s => s.id === sessionId ? { ...s, title: newTitle } : s));
@@ -90,6 +102,41 @@ const HistoryScreen: React.FC = () => {
     return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
   };
 
+  const loadSearchHistory = async () => {
+    if (!user) return;
+
+    try {
+      const searches = await DatabaseService.getSearchHistory(user.id);
+      setSearchHistory(searches);
+    } catch (error) {
+      console.error('Error loading search history:', error);
+      // Fallback to mock data
+      const mockSearches: SearchHistory[] = [
+        {
+          id: '1',
+          search_query: 'criminal lawyer douala',
+          session_title: 'Criminal Defense Inquiry',
+          lawyer_search_results: [
+            { name: 'Maitre Jean Dupont', specialization: 'Criminal Law' }
+          ],
+          created_at: new Date('2024-01-15T10:30:00'),
+          message: 'I need a criminal lawyer in Douala'
+        }
+      ];
+      setSearchHistory(mockSearches);
+    }
+  };
+
+  if (!user) {
+    return (
+      <div className="flex h-full bg-gray-50 dark:bg-gray-900">
+        <div className="w-1/3 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 flex flex-col">
+            Please log in to view your chat history and search records.
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="flex h-full bg-gray-50 dark:bg-gray-900">
       {/* Sessions Sidebar */}
@@ -106,6 +153,31 @@ const HistoryScreen: React.FC = () => {
               className="w-full pl-10 pr-4 py-2 bg-gray-100 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
+           {/* Tab Navigation */}
+           <div className="mt-6">
+              <nav className="flex space-x-8">
+                <button
+                  onClick={() => setActiveTab('chats')}
+                  className={`py-2 px-1 border-b-2 font-medium text-sm ${
+                    activeTab === 'chats'
+                      ? 'border-primary text-primary'
+                      : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                  }`}
+                >
+                  Chat Sessions ({sessions.length})
+                </button>
+                <button
+                  onClick={() => setActiveTab('searches')}
+                  className={`py-2 px-1 border-b-2 font-medium text-sm ${
+                    activeTab === 'searches'
+                      ? 'border-primary text-primary'
+                      : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                  }`}
+                >
+                  Lawyer Searches ({searchHistory.length})
+                </button>
+              </nav>
+            </div>
         </div>
 
         <div className="flex-1 overflow-y-auto">

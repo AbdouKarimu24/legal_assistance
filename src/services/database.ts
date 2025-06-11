@@ -54,11 +54,15 @@ export class DatabaseService {
           user_id CHAR(16) NOT NULL,
           message TEXT NOT NULL,
           sender ENUM('user', 'bot') NOT NULL,
+          search_query TEXT DEFAULT NULL,
+          lawyer_search_results JSON DEFAULT NULL,
           created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
           FOREIGN KEY (session_id) REFERENCES chat_sessions(id) ON DELETE CASCADE,
-          FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+          FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+          INDEX idx_search_query (search_query(100)),
+          INDEX idx_user_searches (user_id, search_query(50))
         )
-      `);
+      `);</old_str>
 
       // Create verification_codes table
       await pool.execute(`
@@ -323,4 +327,118 @@ export class DatabaseService {
       throw error;
     }
   }
-}
+
+  // Chat Session Methods
+  static async createChatSession(sessionData: any) {
+    try {
+      const [result] = await pool.execute(
+        `INSERT INTO chat_sessions (id, user_id, title, created_at, updated_at)
+         VALUES (?, ?, ?, NOW(), NOW())`,
+        [sessionData.id, sessionData.userId, sessionData.title]
+      );
+      
+      return result;
+    } catch (error) {
+      console.error('Error creating chat session:', error);
+      throw error;
+    }
+  }
+
+  static async getChatSessions(userId: string) {
+    try {
+      const [sessions] = await pool.execute(
+        `SELECT * FROM chat_sessions 
+         WHERE user_id = ? 
+         ORDER BY updated_at DESC`,
+        [userId]
+      );
+      
+      return sessions as any[];
+    } catch (error) {
+      console.error('Error fetching chat sessions:', error);
+      throw error;
+    }
+  }
+
+  static async updateChatSession(sessionId: string) {
+    try {
+      await pool.execute(
+        `UPDATE chat_sessions SET updated_at = NOW() WHERE id = ?`,
+        [sessionId]
+      );
+    } catch (error) {
+      console.error('Error updating chat session:', error);
+      throw error;
+    }
+  }
+
+  // Chat Message Methods
+  static async createChatMessage(messageData: any) {
+    try {
+      const [result] = await pool.execute(
+        `INSERT INTO chat_messages (id, session_id, user_id, message, sender, search_query, lawyer_search_results, created_at)
+         VALUES (?, ?, ?, ?, ?, ?, ?, NOW())`,
+        [
+          messageData.id,
+          messageData.sessionId,
+          messageData.userId,
+          messageData.message,
+          messageData.sender,
+          messageData.searchQuery || null,
+          messageData.lawyerSearchResults ? JSON.stringify(messageData.lawyerSearchResults) : null
+        ]
+      );
+
+      // Update session timestamp
+      await this.updateChatSession(messageData.sessionId);
+      
+      return result;
+    } catch (error) {
+      console.error('Error creating chat message:', error);
+      throw error;
+    }
+  }
+
+  static async getChatMessages(sessionId: string) {
+    try {
+      const [messages] = await pool.execute(
+        `SELECT * FROM chat_messages 
+         WHERE session_id = ? 
+         ORDER BY created_at ASC`,
+        [sessionId]
+      );
+      
+      return (messages as any[]).map(message => ({
+        ...message,
+        lawyerSearchResults: message.lawyer_search_results ? 
+          JSON.parse(message.lawyer_search_results) : null
+      }));
+    } catch (error) {
+      console.error('Error fetching chat messages:', error);
+      throw error;
+    }
+  }
+
+  static async getSearchHistory(userId: string) {
+    try {
+      const [searches] = await pool.execute(
+        `SELECT cm.*, cs.title as session_title
+         FROM chat_messages cm
+         JOIN chat_sessions cs ON cm.session_id = cs.id
+         WHERE cm.user_id = ? AND cm.search_query IS NOT NULL
+         ORDER BY cm.created_at DESC
+         LIMIT 50`,
+        [userId]
+      );
+      
+      return (searches as any[]).map(search => ({
+        ...search,
+        lawyerSearchResults: search.lawyer_search_results ? 
+          JSON.parse(search.lawyer_search_results) : null
+      }));
+    } catch (error) {
+      console.error('Error fetching search history:', error);
+      throw error;
+    }
+  }
+}</old_str>

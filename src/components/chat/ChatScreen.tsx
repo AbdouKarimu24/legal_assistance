@@ -8,7 +8,7 @@ interface Message {
   text: string;
   sender: 'user' | 'bot';
   timestamp: Date;
-  isTyping?: boolean;
+  lawyerResults?: any[];
 }
 
 const ChatScreen: React.FC = () => {
@@ -54,7 +54,7 @@ const ChatScreen: React.FC = () => {
   };
 
   const sendMessage = async () => {
-    if (!inputMessage.trim() || isLoading || !user || !currentSessionId) return;
+    if (!inputMessage.trim()) return;
 
     const userMessage: Message = {
       id: Date.now().toString(),
@@ -64,54 +64,47 @@ const ChatScreen: React.FC = () => {
     };
 
     setMessages(prev => [...prev, userMessage]);
-    const messageText = inputMessage;
     setInputMessage('');
     setIsLoading(true);
 
     try {
-      // Save user message to database
-      await chatService.addMessage(currentSessionId, user.id, messageText, 'user');
+      const response = await chatService.sendMessage(
+        inputMessage, 
+        currentSessionId, 
+        user?.id
+      );
 
-      // Add typing indicator
-      const typingMessage: Message = {
-        id: 'typing',
-        text: '',
-        sender: 'bot',
-        timestamp: new Date(),
-        isTyping: true
-      };
-      setMessages(prev => [...prev, typingMessage]);
+      let botResponseText = response.response;
 
-      // Simulate AI response (replace with actual AI API call)
-      await new Promise(resolve => setTimeout(resolve, 1500));
-
-      const botResponse = generateLegalResponse(messageText);
+      // If lawyer results are returned, format them nicely
+      if (response.lawyerResults && response.lawyerResults.length > 0) {
+        // The response already includes formatted lawyer results
+        // Just use it as is
+      }
 
       const botMessage: Message = {
         id: (Date.now() + 1).toString(),
-        text: botResponse,
+        text: botResponseText,
         sender: 'bot',
-        timestamp: new Date()
+        timestamp: new Date(),
+        lawyerResults: response.lawyerResults
       };
 
-      // Save bot response to database
-      await chatService.addMessage(currentSessionId, user.id, botResponse, 'bot');
-
-      setMessages(prev => prev.filter(m => m.id !== 'typing').concat(botMessage));
+      setMessages(prev => [...prev, botMessage]);
+      setCurrentSessionId(response.sessionId);
     } catch (error) {
-      console.error('Error sending message:', error);
       const errorMessage: Message = {
         id: (Date.now() + 1).toString(),
-        text: 'I apologize, but I encountered an error. Please try again.',
+        text: 'Sorry, I encountered an error. Please try again. Make sure you are logged in to save your chat history.',
         sender: 'bot',
         timestamp: new Date()
       };
-      setMessages(prev => prev.filter(m => m.id !== 'typing').concat(errorMessage));
+      setMessages(prev => [...prev, errorMessage]);
     } finally {
       setIsLoading(false);
     }
   };
-  
+
   const generateLegalResponse = (message: string): string => {
     const normalizedMessage = message.toLowerCase();
 
@@ -128,60 +121,60 @@ const ChatScreen: React.FC = () => {
     }
   };
   return (
-    
-      
+
+
         Legal Assistant
         Ask questions about Cameroon's legal system, laws, and offences. I'll provide information and references to relevant legal provisions.
-      
 
-      
+
+
         {messages.map((message) => (
-          
-            
+
+
               {message.sender === 'user' ?  : }
-            
-            
-              
+
+
+
                 {message.text}
-              
+
               {message.timestamp.toLocaleTimeString()}
-            
-          
+
+
         ))}
 
         {isLoading && (
-          
-            
-              
-            
-            
-              
-                
-                
-                
-              
-            
-          
-        )}
-        
-      
 
-      
-        
-          
-            
+
+
+
+
+
+
+
+
+
+
+
+        )}
+
+
+
+
+
+
+
             onChange={(e) => setInputMessage(e.target.value)}
             onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
             placeholder="Ask a legal question..."
-            
+
             disabled={isLoading}
           />
-          
-            
-          
-        
-      
-    
+
+
+
+
+
+
   );
 };
 
