@@ -50,6 +50,8 @@
     "uuid": "^11.1.0"
   },
   "devDependencies": {
+    "@babel/core": "^7.27.4",
+    "@babel/preset-env": "^7.27.2",
     "@playwright/test": "^1.40.0",
     "@types/bcryptjs": "^2.4.6",
     "@types/cors": "^2.8.17",
@@ -67,6 +69,7 @@
     "@vitejs/plugin-react": "^4.1.1",
     "artillery": "^2.0.0",
     "autoprefixer": "^10.4.16",
+    "babel-jest": "^30.0.0",
     "eslint": "^8.53.0",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.4",
@@ -82,6 +85,25 @@
   "jest": {
     "preset": "ts-jest",
     "testEnvironment": "node",
+    "extensionsToTreatAsEsm": [
+      ".ts",
+      ".tsx"
+    ],
+    "globals": {
+      "ts-jest": {
+        "useESM": true
+      }
+    },
+    "moduleNameMapper": {
+      "^(\\.{1,2}/.*)\\.js$": "$1"
+    },
+    "transform": {
+      "^.+\\.(ts|tsx)$": "ts-jest",
+      "^.+\\.(js|jsx)$": "babel-jest"
+    },
+    "transformIgnorePatterns": [
+      "node_modules/(?!(.*\\.mjs$))"
+    ],
     "collectCoverageFrom": [
       "src/**/*.{ts,tsx}",
       "microservices/**/*.{js,ts}",
