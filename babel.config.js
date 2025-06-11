@@ -1,4 +1,3 @@
-
 export default {
   presets: [
     ['@babel/preset-env', {
@@ -11,6 +10,8 @@ export default {
   ],
   plugins: [
     '@babel/plugin-transform-class-properties',
-    '@babel/plugin-transform-runtime'
+    '@babel/plugin-transform-runtime',
+    '@babel/plugin-proposal-private-methods',
+    '@babel/plugin-proposal-private-property-in-object'
   ]
 };
