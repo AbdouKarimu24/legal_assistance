@@ -1,0 +1,75 @@
+
+PS C:\Users\Abdou Karim\Desktop\legalassistance> npm test
+
+> lawhelp-cameroon@1.0.0 test
+> jest
+
+ FAIL  test/integration/chat.test.js
+  ● Test suite failed to run
+
+    ReferenceError: module is not defined
+
+      1 |
+    > 2 | module.exports = {
+        | ^
+      3 |   presets: [
+      4 |     ['@babel/preset-env', {
+      5 |       targets: {
+
+      at file:/C:/Users/Abdou%20Karim/Desktop/legalassistance/babel.config.js:2:1
+      at loadPartialConfigSync (node_modules/@babel/core/src/config/index.ts:50:60)
+      at loadPartialConfigSync (node_modules/@babel/core/src/config/index.ts:69:14)
+      at ScriptTransformer._getCacheKey (node_modules/@jest/transform/build/ScriptTransformer.js:228:41)
+      at ScriptTransformer._getFileCachePath (node_modules/@jest/transform/build/ScriptTransformer.js:289:27)
+      at ScriptTransformer.transformSource (node_modules/@jest/transform/build/ScriptTransformer.js:525:32)
+      at ScriptTransformer._transformAndBuildScript (node_modules/@jest/transform/build/ScriptTransformer.js:674:40)
+      at ScriptTransformer.transform (node_modules/@jest/transform/build/ScriptTransformer.js:726:19)
+
+ FAIL  test/unit/auth.test.js
+  ● Test suite failed to run
+
+    ReferenceError: module is not defined
+
+      1 |
+    > 2 | module.exports = {
+        | ^
+      3 |   presets: [
+      4 |     ['@babel/preset-env', {
+      5 |       targets: {
+
+      at file:/C:/Users/Abdou%20Karim/Desktop/legalassistance/babel.config.js:2:1
+      at loadPartialConfigSync (node_modules/@babel/core/src/config/index.ts:50:60)
+      at loadPartialConfigSync (node_modules/@babel/core/src/config/index.ts:69:14)
+      at ScriptTransformer._getCacheKey (node_modules/@jest/transform/build/ScriptTransformer.js:228:41)
+      at ScriptTransformer._getFileCachePath (node_modules/@jest/transform/build/ScriptTransformer.js:289:27)
+      at ScriptTransformer.transformSource (node_modules/@jest/transform/build/ScriptTransformer.js:525:32)
+      at ScriptTransformer._transformAndBuildScript (node_modules/@jest/transform/build/ScriptTransformer.js:674:40)
+      at ScriptTransformer.transform (node_modules/@jest/transform/build/ScriptTransformer.js:726:19)
+
+ FAIL  test/e2e/user-journey.test.js
+  ● Test suite failed to run
+
+    ReferenceError: module is not defined
+
+      1 |
+    > 2 | module.exports = {
+        | ^
+      3 |   presets: [
+      4 |     ['@babel/preset-env', {
+      5 |       targets: {
+
+      at file:/C:/Users/Abdou%20Karim/Desktop/legalassistance/babel.config.js:2:1
+      at loadPartialConfigSync (node_modules/@babel/core/src/config/index.ts:50:60)
+      at loadPartialConfigSync (node_modules/@babel/core/src/config/index.ts:69:14)
+      at ScriptTransformer._getCacheKey (node_modules/@jest/transform/build/ScriptTransformer.js:228:41)
+      at ScriptTransformer._getFileCachePath (node_modules/@jest/transform/build/ScriptTransformer.js:289:27)
+      at ScriptTransformer.transformSource (node_modules/@jest/transform/build/ScriptTransformer.js:525:32)
+      at ScriptTransformer._transformAndBuildScript (node_modules/@jest/transform/build/ScriptTransformer.js:674:40)
+      at ScriptTransformer.transform (node_modules/@jest/transform/build/ScriptTransformer.js:726:19)
+
+Test Suites: 3 failed, 3 total
+Tests:       0 total
+Snapshots:   0 total
+Time:        3.675 s, estimated 9 s
+Ran all test suites.
+PS C:\Users\Abdou Karim\Desktop\legalassistance>
